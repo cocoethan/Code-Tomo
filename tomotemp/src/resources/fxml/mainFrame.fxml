@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane fx:id="mainAnchorPane" style="-fx-background-color: #ffff;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controllers.MainController">
+   <children>
+      <Pane fx:id="mainPane" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #ffff;">
+         <children>
+            <VBox fx:id="tabsVBox" layoutY="251.0" prefHeight="469.0" prefWidth="255.0">
+               <children>
+                  <Button fx:id="homeTabBtn" mnemonicParsing="false" onAction="#switchToHomeTab" prefHeight="59.0" prefWidth="255.0" text="Home" />
+                  <Button fx:id="tasksTabBtn" mnemonicParsing="false" onAction="#switchToTasksTab" prefHeight="59.0" prefWidth="255.0" text="Tasks" />
+               </children>
+            </VBox>
+            <ImageView fx:id="tomoImgView" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+            <StackPane fx:id="viewStackPane" layoutX="255.0" layoutY="-1.0" prefHeight="720.0" prefWidth="1025.0" style="-fx-background-color: #ffff;">
+               <children>
+                  <BorderPane fx:id="homeTabPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffff;">
+                     <center>
+                        <fx:include source="homeFrame.fxml" />
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="tasksTabPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffff;">
+                     <center>
+                        <fx:include source="tasksFrame.fxml" />
+                     </center>
+                  </BorderPane>
+               </children>
+            </StackPane>
+         </children>
+      </Pane>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="250.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="480.0" layoutY="250.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="730.0" layoutX="254.0" layoutY="-1.0" stroke="BLACK" strokeType="OUTSIDE" width="1029.0" />
+   </children>
+</AnchorPane>
