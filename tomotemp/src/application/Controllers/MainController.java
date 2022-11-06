@@ -14,6 +14,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * @author Ethan Coco
+ */
 public class MainController implements Initializable{
 
     @FXML
