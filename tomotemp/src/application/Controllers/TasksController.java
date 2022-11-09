@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import application.Controllers.TasksController;
 import application.Controllers.TasksController.Cell;
+import application.models.TasksModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -47,6 +48,7 @@ public class TasksController{
     
     private int selectedTask;
     private int startCheck = 0;
+    private String tTitleTextFieldToString;
     
     static class Cell extends ListCell<String>{
     	HBox tasksListViewHbox = new HBox();
@@ -95,6 +97,13 @@ public class TasksController{
 					tasksListView.setCellFactory(param -> new Cell());
 				}
 				startCheck = 1;
+				
+				//!!! FOR LANE DEESE
+				//Start Add Task to Database from controller
+				tTitleTextFieldToString = tController.tTitleTextField.getText();
+				TasksModel.addNewTaskToDB(tTitleTextFieldToString);
+				//End AddTask to Database from controller
+				
 				tasksListView.getItems().add(tController.tTitleTextField.getText());
 			}
 			
