@@ -2,6 +2,9 @@ package application.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -66,42 +69,8 @@ public class TasksController{
     static String tPriorChoiceBoxToString;
     private int priorChoiceBoxToInt = 0;
     
-    public class Task {
-    	static String name;
-    	static int priority;
-    	static String date;
-    	
-    	public Task() {
-    		name = this.name;
-    		priority = this.priority;
-    		date = this.date;
-    	}
-    	
-    	public void setName(String namePassed) {
-    		this.name = namePassed;
-    	}
-    	
-    	public static String getName() {
-    		return name;
-    	}
-    	
-    	public void setPriority(int priorityPassed) {
-    		this.priority = priorityPassed;
-    	}
-    	
-    	public static int getPriority() {
-    		return priority;
-    	}
-    	
-    	public void setDate(String datePassed) {
-    		this.date = datePassed;
-    	}
-    	
-    	public static String getDate() {
-    		return date;
-    	}
-    }
-    
+    static List<String> Task = new ArrayList<>(3); //
+    static List<List<String>> taskList = new ArrayList<>(); //In conjunction with tasksListView, used to pass accurate values
     
     static class Cell extends ListCell<String>{
     	CheckBox c = new CheckBox();
@@ -112,19 +81,23 @@ public class TasksController{
     	HBox tasksListViewHbox = new HBox();
     	Pane tasksListViewPane = new Pane();
     	Label tasksListViewTitleLabel = new Label("");
-    	Button tasksListViewEditBtn = new Button("Edit");
+    	//Button tasksListViewEditBtn = new Button("Edit");
     	Button tasksListViewDeleteBtn = new Button("Delete");
+    	
+    	//int currIndex = getListView().getSelectionModel().getSelectedIndex();
     	
     	public Cell() {
     		super();
     		
     		tasksListViewTitleLabel.setFont(new Font("Arial",15));
-    		tasksListViewHbox.getChildren().addAll(c, spaceLabel, priorityLabel, tasksListViewTitleLabel, tasksListViewPane, tasksListViewEditBtn, tasksListViewDeleteBtn);
+    		tasksListViewHbox.getChildren().addAll(c, spaceLabel, priorityLabel, tasksListViewTitleLabel, tasksListViewPane, tasksListViewDeleteBtn);
     		tasksListViewHbox.setHgrow(tasksListViewPane, Priority.ALWAYS);
     		tasksListViewHbox.setAlignment(Pos.CENTER_LEFT);
     		tasksListViewDeleteBtn.setOnAction(e -> {
+    			getListView().getSelectionModel().select(getItem());
+    			//System.out.println(getListView().getSelectionModel().getSelectedIndex() + "");
+    			deleteTask(getListView().getSelectionModel().getSelectedIndex());
     			getListView().getItems().remove(getItem());
-    			deleteTask();
     		});
     		
     	}
@@ -137,7 +110,7 @@ public class TasksController{
     		if(name != null && !empty) {
     			tasksListViewTitleLabel.setText(name);
     			
-    			if(Task.getName().equals(name) == true && Task.getPriority() != 0) {
+    			if(Task.get(0).equals(name) == true && Task.get(1).equals("0") == false) {
     				priorityLabel.setText(tPriorChoiceBoxToString + "  ");
     			}
     			
@@ -152,7 +125,8 @@ public class TasksController{
     	priorChoiceCheck = 0;
     	priorChoiceBoxToInt = 0;
     	
-    	Task currTask = new Task();
+    	//Task currTask = new Task();
+    	Task = new ArrayList<>();
     	
     	try {
 			FXMLLoader fxmlLoader = new FXMLLoader();
@@ -174,35 +148,46 @@ public class TasksController{
 				startCheck = 1;
 				tTitleTextFieldToString = tController.tTitleTextField.getText();
 				
-				currTask.setName(tController.tTitleTextField.getText());
+				//Add name to Task array
+				
+				Task.add(tController.tTitleTextField.getText());//Add name to task array
+				
+				//Add priority to Task array
 				
 				if(tController.tPriorChoiceBox.getValue() == "Low Priority") {
 					priorChoiceCheck = 1;
 					tPriorChoiceBoxToString = "!";
 					priorChoiceBoxToInt = 1;
-					currTask.setPriority(priorChoiceBoxToInt);
+					Task.add(priorChoiceBoxToInt + "");
 				}else if(tController.tPriorChoiceBox.getValue() == "Medium Priority") {
 					priorChoiceCheck = 1;
 					tPriorChoiceBoxToString = "!!";
 					priorChoiceBoxToInt = 2;
-					currTask.setPriority(priorChoiceBoxToInt);
+					Task.add(priorChoiceBoxToInt + "");
 				}else if(tController.tPriorChoiceBox.getValue() == "High Priority") {
 					priorChoiceCheck = 1;
 					tPriorChoiceBoxToString = "!!!";
 					priorChoiceBoxToInt = 3;
-					currTask.setPriority(priorChoiceBoxToInt);
+					Task.add(priorChoiceBoxToInt + "");
 				}else {
 					priorChoiceCheck = 0;
-					currTask.setPriority(0);
+					Task.add(0 + "");
 				}
 				
+				//Add date to Task array
+				if(tController.tDateDatePicker.getValue() != null) {
+					Task.add(tController.tDateDatePicker.getValue().toString());
+				}else {
+					Task.add("0000-00-00");
+				}
+				
+				taskList.add(Task);
+				tasksListView.getItems().add(tController.tTitleTextField.getText());
 				
 				//!!! FOR LANE DEESE
 				//Start Add Task to Database from controller
-				TasksModel.addNewTaskToDB(tTitleTextFieldToString, priorChoiceBoxToInt);
+				TasksModel.addNewTaskToDB(Task);
 				//End AddTask to Database from controller
-				
-				tasksListView.getItems().add(tController.tTitleTextField.getText());
 			}
 			
 			} catch (IOException e1) {
@@ -211,8 +196,9 @@ public class TasksController{
 			}
     }
     
-    static void deleteTask() {
-    	
+    static void deleteTask(int position) {
+    	TasksModel.deleteTaskToDB(taskList.get(position));
+    	taskList.remove(position);
     }
     
 }

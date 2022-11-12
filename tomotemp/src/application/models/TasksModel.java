@@ -1,18 +1,21 @@
 package application.models;
 
+import java.util.List;
+
 public class TasksModel{
-	public static void addNewTaskToDB(String taskTitle, int taskPriority) {
-		//!!! FOR LANE DEESE
-		//Add Task to Database here
+	public static void addNewTaskToDB(List<String> currTask) {
+		String name = currTask.get(0);
+		String priority = currTask.get(1);
+		String date = currTask.get(2);
 		
-		//Key:
-		//taskTitle = name of task to add
-		//taskPriority = priority of tasks (0 == No Priority, 1 == Low Priority, 2 == Medium Priority, 3 == High Priority)
-		
-		
+		System.out.println("Task Added: " + currTask);
 	}
 	
-	public static void deleteTaskToDB() {
+	public static void deleteTaskToDB(List<String> currTask) {
+		String name = currTask.get(0);
+		String priority = currTask.get(1);
+		String date = currTask.get(2);
 		
+		System.out.println("Task Deleted: " + currTask);
 	}
 }
