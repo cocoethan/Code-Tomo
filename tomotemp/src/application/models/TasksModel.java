@@ -11,4 +11,8 @@ public class TasksModel{
 		
 		
 	}
+	
+	public static void deleteTaskToDB() {
+		
+	}
 }

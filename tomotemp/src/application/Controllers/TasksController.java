@@ -66,6 +66,42 @@ public class TasksController{
     static String tPriorChoiceBoxToString;
     private int priorChoiceBoxToInt = 0;
     
+    public class Task {
+    	static String name;
+    	static int priority;
+    	static String date;
+    	
+    	public Task() {
+    		name = this.name;
+    		priority = this.priority;
+    		date = this.date;
+    	}
+    	
+    	public void setName(String namePassed) {
+    		this.name = namePassed;
+    	}
+    	
+    	public static String getName() {
+    		return name;
+    	}
+    	
+    	public void setPriority(int priorityPassed) {
+    		this.priority = priorityPassed;
+    	}
+    	
+    	public static int getPriority() {
+    		return priority;
+    	}
+    	
+    	public void setDate(String datePassed) {
+    		this.date = datePassed;
+    	}
+    	
+    	public static String getDate() {
+    		return date;
+    	}
+    }
+    
     
     static class Cell extends ListCell<String>{
     	CheckBox c = new CheckBox();
@@ -86,8 +122,11 @@ public class TasksController{
     		tasksListViewHbox.getChildren().addAll(c, spaceLabel, priorityLabel, tasksListViewTitleLabel, tasksListViewPane, tasksListViewEditBtn, tasksListViewDeleteBtn);
     		tasksListViewHbox.setHgrow(tasksListViewPane, Priority.ALWAYS);
     		tasksListViewHbox.setAlignment(Pos.CENTER_LEFT);
-    		//tasksListViewHbox.setBorder(new Border( new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, new Insets(-3,-5.6, -3, -5.6))));
-    		tasksListViewDeleteBtn.setOnAction(e -> getListView().getItems().remove(getItem()));
+    		tasksListViewDeleteBtn.setOnAction(e -> {
+    			getListView().getItems().remove(getItem());
+    			deleteTask();
+    		});
+    		
     	}
     	
     	public void updateItem(String name, boolean empty) {
@@ -98,7 +137,7 @@ public class TasksController{
     		if(name != null && !empty) {
     			tasksListViewTitleLabel.setText(name);
     			
-    			if(priorChoiceCheck == 1) {
+    			if(Task.getName().equals(name) == true && Task.getPriority() != 0) {
     				priorityLabel.setText(tPriorChoiceBoxToString + "  ");
     			}
     			
@@ -112,6 +151,9 @@ public class TasksController{
     void addNewTask(ActionEvent event) {
     	priorChoiceCheck = 0;
     	priorChoiceBoxToInt = 0;
+    	
+    	Task currTask = new Task();
+    	
     	try {
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setLocation(getClass().getResource("/resources/fxml/dialogs/addTaskDialog.fxml"));
@@ -131,20 +173,27 @@ public class TasksController{
 				}
 				startCheck = 1;
 				tTitleTextFieldToString = tController.tTitleTextField.getText();
+				
+				currTask.setName(tController.tTitleTextField.getText());
+				
 				if(tController.tPriorChoiceBox.getValue() == "Low Priority") {
 					priorChoiceCheck = 1;
 					tPriorChoiceBoxToString = "!";
 					priorChoiceBoxToInt = 1;
+					currTask.setPriority(priorChoiceBoxToInt);
 				}else if(tController.tPriorChoiceBox.getValue() == "Medium Priority") {
 					priorChoiceCheck = 1;
 					tPriorChoiceBoxToString = "!!";
 					priorChoiceBoxToInt = 2;
+					currTask.setPriority(priorChoiceBoxToInt);
 				}else if(tController.tPriorChoiceBox.getValue() == "High Priority") {
 					priorChoiceCheck = 1;
 					tPriorChoiceBoxToString = "!!!";
 					priorChoiceBoxToInt = 3;
+					currTask.setPriority(priorChoiceBoxToInt);
 				}else {
-					
+					priorChoiceCheck = 0;
+					currTask.setPriority(0);
 				}
 				
 				
@@ -160,6 +209,10 @@ public class TasksController{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+    }
+    
+    static void deleteTask() {
+    	
     }
     
 }
