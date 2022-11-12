@@ -77,6 +77,7 @@ public class TasksController{
     	Label spaceLabel = new Label("  ");
     	
     	Label priorityLabel = new Label("");
+    	Label dateLabel = new Label("");
     	
     	HBox tasksListViewHbox = new HBox();
     	Pane tasksListViewPane = new Pane();
@@ -90,7 +91,7 @@ public class TasksController{
     		super();
     		
     		tasksListViewTitleLabel.setFont(new Font("Arial",15));
-    		tasksListViewHbox.getChildren().addAll(c, spaceLabel, priorityLabel, tasksListViewTitleLabel, tasksListViewPane, tasksListViewDeleteBtn);
+    		tasksListViewHbox.getChildren().addAll(c, spaceLabel, priorityLabel, tasksListViewTitleLabel, dateLabel, tasksListViewPane, tasksListViewDeleteBtn);
     		tasksListViewHbox.setHgrow(tasksListViewPane, Priority.ALWAYS);
     		tasksListViewHbox.setAlignment(Pos.CENTER_LEFT);
     		tasksListViewDeleteBtn.setOnAction(e -> {
@@ -112,6 +113,10 @@ public class TasksController{
     			
     			if(Task.get(0).equals(name) == true && Task.get(1).equals("0") == false) {
     				priorityLabel.setText(tPriorChoiceBoxToString + "  ");
+    			}
+    			
+    			if(Task.get(0).equals(name) == true && Task.get(2).equals("0000-00-00") == false) {
+    				dateLabel.setText("  " + Task.get(2) + "  ");
     			}
     			
     			setGraphic(tasksListViewHbox);
