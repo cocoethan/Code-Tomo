@@ -11,31 +11,25 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane fx:id="tAddTaskPane" prefHeight="232.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controllers.TasksController">
+<DialogPane fx:id="tAddTaskPane" prefHeight="216.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controllers.TasksController">
    <graphic>
-      <GridPane hgap="10.0" prefHeight="150.0" prefWidth="519.0" vgap="25.0">
+      <GridPane hgap="10.0" prefHeight="150.0" prefWidth="519.0" vgap="5.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="10.0" prefWidth="89.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="430.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Title" />
-            <Label text="Notes" GridPane.rowIndex="1" />
-            <Label text="Priority" GridPane.rowIndex="2" />
-            <Label text="Date (Optional)" GridPane.rowIndex="3" />
-            <Label text="Time (Optional)" GridPane.rowIndex="4" />
+            <Label text="Priority" GridPane.rowIndex="1" />
+            <Label text="Date (Optional)" GridPane.rowIndex="2" />
             <TextField fx:id="tTitleTextField" GridPane.columnIndex="1" />
-            <TextField fx:id="tNotesTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="tTimeTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <DatePicker fx:id="tDateDatePicker" prefHeight="25.0" prefWidth="427.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ChoiceBox fx:id="tPriorChoiceBox" prefHeight="25.0" prefWidth="427.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <DatePicker fx:id="tDateDatePicker" prefHeight="25.0" prefWidth="427.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ChoiceBox fx:id="tPriorChoiceBox" prefHeight="25.0" prefWidth="427.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </graphic>

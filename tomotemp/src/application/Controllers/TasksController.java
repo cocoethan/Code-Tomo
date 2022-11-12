@@ -13,8 +13,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
@@ -23,9 +26,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * @author Ethan Coco
@@ -48,9 +58,21 @@ public class TasksController{
     
     private int selectedTask;
     private int startCheck = 0;
+    static int priorChoiceCheck = 0;
+    
+    private String[] priorityChoiceBox = {"Low Priority", "Medium Priority", "High Priority"};
+    
     private String tTitleTextFieldToString;
+    static String tPriorChoiceBoxToString;
+    private int priorChoiceBoxToInt = 0;
+    
     
     static class Cell extends ListCell<String>{
+    	CheckBox c = new CheckBox();
+    	Label spaceLabel = new Label("  ");
+    	
+    	Label priorityLabel = new Label("");
+    	
     	HBox tasksListViewHbox = new HBox();
     	Pane tasksListViewPane = new Pane();
     	Label tasksListViewTitleLabel = new Label("");
@@ -60,9 +82,11 @@ public class TasksController{
     	public Cell() {
     		super();
     		
-    		tasksListViewHbox.getChildren().addAll(tasksListViewTitleLabel, tasksListViewPane, tasksListViewEditBtn, tasksListViewDeleteBtn);
+    		tasksListViewTitleLabel.setFont(new Font("Arial",15));
+    		tasksListViewHbox.getChildren().addAll(c, spaceLabel, priorityLabel, tasksListViewTitleLabel, tasksListViewPane, tasksListViewEditBtn, tasksListViewDeleteBtn);
     		tasksListViewHbox.setHgrow(tasksListViewPane, Priority.ALWAYS);
-    	
+    		tasksListViewHbox.setAlignment(Pos.CENTER_LEFT);
+    		//tasksListViewHbox.setBorder(new Border( new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT, new Insets(-3,-5.6, -3, -5.6))));
     		tasksListViewDeleteBtn.setOnAction(e -> getListView().getItems().remove(getItem()));
     	}
     	
@@ -73,6 +97,11 @@ public class TasksController{
     		
     		if(name != null && !empty) {
     			tasksListViewTitleLabel.setText(name);
+    			
+    			if(priorChoiceCheck == 1) {
+    				priorityLabel.setText(tPriorChoiceBoxToString + "  ");
+    			}
+    			
     			setGraphic(tasksListViewHbox);
     		}
     		
@@ -81,11 +110,15 @@ public class TasksController{
     
     @FXML
     void addNewTask(ActionEvent event) {
+    	priorChoiceCheck = 0;
+    	priorChoiceBoxToInt = 0;
     	try {
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setLocation(getClass().getResource("/resources/fxml/dialogs/addTaskDialog.fxml"));
 			DialogPane tAddTaskPane = fxmlLoader.load();
 			TasksController tController = fxmlLoader.getController();
+			
+			tController.tPriorChoiceBox.getItems().addAll(priorityChoiceBox);
 			
 			Dialog<ButtonType> dialog = new Dialog<>();
 			dialog.setDialogPane(tAddTaskPane);
@@ -97,11 +130,27 @@ public class TasksController{
 					tasksListView.setCellFactory(param -> new Cell());
 				}
 				startCheck = 1;
+				tTitleTextFieldToString = tController.tTitleTextField.getText();
+				if(tController.tPriorChoiceBox.getValue() == "Low Priority") {
+					priorChoiceCheck = 1;
+					tPriorChoiceBoxToString = "!";
+					priorChoiceBoxToInt = 1;
+				}else if(tController.tPriorChoiceBox.getValue() == "Medium Priority") {
+					priorChoiceCheck = 1;
+					tPriorChoiceBoxToString = "!!";
+					priorChoiceBoxToInt = 2;
+				}else if(tController.tPriorChoiceBox.getValue() == "High Priority") {
+					priorChoiceCheck = 1;
+					tPriorChoiceBoxToString = "!!!";
+					priorChoiceBoxToInt = 3;
+				}else {
+					
+				}
+				
 				
 				//!!! FOR LANE DEESE
 				//Start Add Task to Database from controller
-				tTitleTextFieldToString = tController.tTitleTextField.getText();
-				TasksModel.addNewTaskToDB(tTitleTextFieldToString);
+				TasksModel.addNewTaskToDB(tTitleTextFieldToString, priorChoiceBoxToInt);
 				//End AddTask to Database from controller
 				
 				tasksListView.getItems().add(tController.tTitleTextField.getText());

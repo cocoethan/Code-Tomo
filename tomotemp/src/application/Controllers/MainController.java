@@ -48,6 +48,11 @@ public class MainController implements Initializable{
 
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
+	}
+    
+    /*
+    @Override
+	public void initialize(URL location, ResourceBundle resources) {
     	homeTabPane.toFront();
 	}
     
@@ -60,6 +65,6 @@ public class MainController implements Initializable{
     void switchToTasksTab(ActionEvent e) {
     		tasksTabPane.toFront();
     }
-    
+    */
     
 }

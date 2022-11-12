@@ -21,6 +21,7 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/mainFrame.fxml"));
 			Scene scene = new Scene(root, 1280, 720);
 			primaryStage.setTitle("Test");
+			//scene.getStylesheets().add("/resources/css/list-view-cell-gap.css");
 			primaryStage.setScene(scene);//Setting View (MVC Model)
 			primaryStage.show();
 			

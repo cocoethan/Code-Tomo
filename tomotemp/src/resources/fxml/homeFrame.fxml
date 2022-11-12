@@ -6,7 +6,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controllers.HomeController">
    <children>
-      <Pane prefHeight="730.0" prefWidth="1029.0">
+      <Pane prefHeight="650.0" prefWidth="1029.0">
          <children>
             <Label layoutX="14.0" layoutY="14.0" text="Home" />
          </children>
