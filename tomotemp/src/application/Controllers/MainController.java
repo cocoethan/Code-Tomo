@@ -93,15 +93,17 @@ public class MainController implements Initializable{
     	tomoSleepingGIF.toFront();//use .toFront() to switch images/gifs
     	updateItems =FXCollections.observableArrayList ("Program started.");
     	updatesList.setItems(updateItems);
+    	start();
 	}
     
-    public static void main(String[] args) {
-    	//Do Stuff Here
+    //Do anything
+    public static void start() {
+    	
     }
     
     //Used to update list when outside function happens, for example: task added, task removed
     public static void updateUpdatesList(String message) {
-    	updateItems.add(message);
+    	updateItems.add(message + " +5");
     }
     
     //Used to calculate points etc. when task is added
