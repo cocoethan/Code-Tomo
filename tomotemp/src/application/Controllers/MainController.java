@@ -19,10 +19,7 @@ import javafx.scene.layout.VBox;
  */
 public class MainController implements Initializable{
 
-    @FXML
-    private Button homeTabBtn;
-
-    @FXML
+	@FXML
     private BorderPane homeTabPane;
 
     @FXML
@@ -35,36 +32,42 @@ public class MainController implements Initializable{
     private VBox tabsVBox;
 
     @FXML
-    private Button tasksTabBtn;
-
-    @FXML
     private BorderPane tasksTabPane;
 
     @FXML
-    private ImageView tomoImgView;
+    private ImageView tomoLayDownGIF;
 
     @FXML
-    private StackPane viewStackPane;
+    private ImageView tomoLickGIF;
+
+    @FXML
+    private ImageView tomoSitDownGIF;
+
+    @FXML
+    private ImageView tomoSleepingGIF;
+
+    @FXML
+    private ImageView tomoStandingEyesClosedImg;
+
+    @FXML
+    private ImageView tomoStandingEyesOpenImg;
+
+    @FXML
+    private ImageView tomoStandingImg;
+
+    @FXML
+    private StackPane viewStackPane;//Do not use
+    
+    @FXML
+    private StackPane imgStackPane;
 
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
+    	tomoStandingEyesOpenImg.toFront();//use .toFront() to switch images/gifs
 	}
     
-    /*
-    @Override
-	public void initialize(URL location, ResourceBundle resources) {
-    	homeTabPane.toFront();
-	}
-    
-    @FXML
-    void switchToHomeTab(ActionEvent e) {
-    	homeTabPane.toFront();
+    public static void main(String[] args) {
+    	//Do Stuff Here
     }
-
-    @FXML
-    void switchToTasksTab(ActionEvent e) {
-    		tasksTabPane.toFront();
-    }
-    */
     
 }

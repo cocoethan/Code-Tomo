@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -21,12 +22,50 @@
                   <ListView prefHeight="440.0" prefWidth="255.0" />
                </children>
             </VBox>
-            <ImageView fx:id="tomoImgView" fitHeight="256.0" fitWidth="255.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
             <StackPane fx:id="viewStackPane" disable="true" layoutX="255.0" layoutY="54.0" prefHeight="706.0" prefWidth="1029.0" style="-fx-background-color: #ffff;" visible="false" />
+            <StackPane fx:id="imgStackPane" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="tomoStandingEyesOpenImg" fitHeight="240.0" fitWidth="238.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@../images/sittingEyesOpenIdle.gif" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="tomoStandingEyesClosedImg" fitHeight="240.0" fitWidth="238.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@../images/sittingEyesClosedIdle.gif" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="tomoStandingImg" fitHeight="240.0" fitWidth="238.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@../images/standingIdle.gif" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="tomoLickGIF" fitHeight="240.0" fitWidth="238.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@../images/lick.gif" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="tomoSitDownGIF" fitHeight="240.0" fitWidth="238.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@../images/sitDown.gif" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="tomoLayDownGIF" fitHeight="240.0" fitWidth="238.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@../images/layDown.gif" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="tomoSleepingGIF" fitHeight="240.0" fitWidth="238.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                     <image>
+                        <Image url="@../images/sleeping.gif" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
             <Button layoutY="-1.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="255.0" text="Account" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="256.0" layoutY="36.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
          </children>
       </Pane>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="256.0" layoutY="35.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="437.0" layoutY="290.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
       <TabPane layoutX="255.0" prefHeight="730.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="29.0" tabMinWidth="100.0">
         <tabs>
