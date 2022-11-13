@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -8,7 +10,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
@@ -19,7 +24,43 @@
          <children>
             <VBox fx:id="tabsVBox" layoutY="290.0" prefHeight="437.0" prefWidth="255.0">
                <children>
-                  <ListView prefHeight="440.0" prefWidth="255.0" />
+                  <GridPane prefHeight="139.0" prefWidth="255.0" style="-fx-background-color: #D3D3D3;">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Name:" />
+                        <Label text="Health:" GridPane.rowIndex="1" />
+                        <Label text="Mood:" GridPane.rowIndex="2" />
+                        <Label fx:id="nameValue" text="default" GridPane.columnIndex="1" />
+                        <Label fx:id="healthValue" text="default" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="moodValue" text="default" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Level:" GridPane.columnIndex="2" />
+                        <Label text="Ovr Points:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label text="Points:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label fx:id="levelValue" text="default" GridPane.columnIndex="3" />
+                        <Label fx:id="ovrPointsValue" text="default" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Label fx:id="currPointsValue" text="default" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </GridPane>
+                  <ListView fx:id="updatesList" prefHeight="440.0" prefWidth="255.0" style="-fx-background-color: #D3D3D3;" />
                </children>
             </VBox>
             <StackPane fx:id="viewStackPane" disable="true" layoutX="255.0" layoutY="54.0" prefHeight="706.0" prefWidth="1029.0" style="-fx-background-color: #ffff;" visible="false" />
@@ -62,26 +103,14 @@
                   </ImageView>
                </children>
             </StackPane>
-            <Button layoutY="-1.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="255.0" text="Account" />
+            <Button layoutY="-1.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="255.0" style="-fx-background-color: #D3D3D3;" text="Account" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="256.0" layoutY="36.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="437.0" layoutY="292.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="369.0" layoutY="357.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
          </children>
       </Pane>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" disable="true" fill="#1f93ff00" height="437.0" layoutY="290.0" stroke="BLACK" strokeType="INSIDE" width="255.0" />
       <TabPane layoutX="255.0" prefHeight="730.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="29.0" tabMinWidth="100.0">
         <tabs>
-          <Tab text="Home">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <BorderPane fx:id="homeTabPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffff;">
-                           <center>
-                              <fx:include source="homeFrame.fxml" />
-                           </center>
-                        </BorderPane>
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
           <Tab text="Tasks">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
