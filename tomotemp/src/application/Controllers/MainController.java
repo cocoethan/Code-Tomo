@@ -1,10 +1,12 @@
 package application.Controllers;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -91,7 +93,7 @@ public class MainController implements Initializable{
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
     	tomoSleepingGIF.toFront();//use .toFront() to switch images/gifs
-    	updateItems =FXCollections.observableArrayList ("Program started.");
+    	updateItems = FXCollections.observableArrayList("Program started.");
     	updatesList.setItems(updateItems);
     	start();
 	}
@@ -103,7 +105,9 @@ public class MainController implements Initializable{
     
     //Used to update list when outside function happens, for example: task added, task removed
     public static void updateUpdatesList(String message) {
-    	updateItems.add(message + " +5");
+    	updateItems.add(message);
+    	
+    	//updatesList.setItems(sortedList);
     }
     
     //Used to calculate points etc. when task is added

@@ -1,7 +1,9 @@
 package application.models;
 
+import java.sql.Time;
 import java.util.List;
 
+import application.Database;
 import application.Controllers.MainController;
 
 public class TasksModel{
@@ -10,8 +12,13 @@ public class TasksModel{
 		String priority = currTask.get(1);
 		String date = currTask.get(2);
 		
-		MainController.updateUpdatesList("New task added.");
+		MainController.updateUpdatesList("New task added. +5");
 		System.out.println("Task Added: " + currTask);
+		
+		//begin code
+		//FOR LANE DEESE
+		//Database.placeAlarm(null, null, null);
+		
 	}
 	
 	public static void deleteTaskToDB(List<String> currTask) {
@@ -21,5 +28,9 @@ public class TasksModel{
 		
 		MainController.updateUpdatesList("Task removed.");
 		System.out.println("Task Deleted: " + currTask);
+		
+		//begin code
+		
+		
 	}
 }

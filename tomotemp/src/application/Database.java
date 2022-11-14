@@ -55,7 +55,7 @@ public class Database {
 		}
 		
 	}
-	private void placeAlarm(int aID, String days, Time time) throws SQLException {
+	public static void placeAlarm(int aID, String days, Time time) throws SQLException {
 		PreparedStatement baseId = conn.prepareStatement("INSERT INTO alarm values(?,?,?,?);");
 		baseId.setInt(1, aID);
 		baseId.setString(2, days);
@@ -63,7 +63,7 @@ public class Database {
 		baseId.setInt(4, 1);
 		baseId.execute();
 	}
-	private void placeReminder(int rID, String days, Time time) throws SQLException {
+	public static void placeReminder(int rID, String days, Time time) throws SQLException {
 		PreparedStatement baseId = conn.prepareStatement("INSERT INTO alarm values(?,?,?,?);");
 		baseId.setInt(1, rID);
 		baseId.setString(2, days);
@@ -71,7 +71,7 @@ public class Database {
 		baseId.setInt(4, 1);
 		baseId.execute();
 	}
-	private void placeTamo(int tID, String type, String mood) throws SQLException {
+	public static void placeTamo(int tID, String type, String mood) throws SQLException {
 		PreparedStatement baseId = conn.prepareStatement("INSERT INTO alarm values(?,?,?,?);");
 		baseId.setInt(1, tID);
 		baseId.setString(2, type);
