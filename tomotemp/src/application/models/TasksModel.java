@@ -12,7 +12,7 @@ public class TasksModel{
 		String priority = currTask.get(1);
 		String date = currTask.get(2);
 		
-		MainController.updateUpdatesList("New task added. +5");
+		//MainController.updateUpdatesList("New task added.");
 		System.out.println("Task Added: " + currTask);
 		
 		//begin code

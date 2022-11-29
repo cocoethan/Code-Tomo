@@ -3,11 +3,14 @@ package application.Controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import application.Tomo;
 import application.Controllers.TasksController;
 import application.Controllers.TasksController.Cell;
 import application.models.TasksModel;
@@ -69,8 +72,10 @@ public class TasksController{
     static String tPriorChoiceBoxToString;
     private int priorChoiceBoxToInt = 0;
     
-    static List<String> Task = new ArrayList<>(3); //
+    static List<String> Task = new ArrayList<>(); //
     static List<List<String>> taskList = new ArrayList<>(); //In conjunction with tasksListView, used to pass accurate values
+    
+    static List<String> tempTask = new ArrayList<>();
     
     static class Cell extends ListCell<String>{
     	CheckBox c = new CheckBox();
@@ -100,6 +105,12 @@ public class TasksController{
     			deleteTask(getListView().getSelectionModel().getSelectedIndex());
     			getListView().getItems().remove(getItem());
     		});
+    		c.setOnAction(e ->{
+    			c.setDisable(true);
+    			getListView().getSelectionModel().select(getItem());
+    			completeTask(getListView().getSelectionModel().getSelectedIndex());
+    		});
+    		
     		
     	}
     	
@@ -186,6 +197,13 @@ public class TasksController{
 					Task.add("0000-00-00");
 				}
 				
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
+				LocalDateTime now = LocalDateTime.now();
+				String timeadded = "" + dtf.format(now);
+				System.out.println(timeadded);
+				Task.add(timeadded);
+				Task.add("0000-00-00-00:00");
+				
 				taskList.add(Task);
 				tasksListView.getItems().add(tController.tTitleTextField.getText());
 				
@@ -194,6 +212,7 @@ public class TasksController{
 				TasksModel.addNewTaskToDB(Task);
 				//End AddTask to Database from controller
 			}
+			Tomo.taskAdded();
 			
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -204,6 +223,29 @@ public class TasksController{
     static void deleteTask(int position) {
     	TasksModel.deleteTaskToDB(taskList.get(position));
     	taskList.remove(position);
+    	
+    	Tomo.taskDeleted();
+    }
+    
+    static void completeTask(int position) {
+    	tempTask = new ArrayList<>();
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
+		LocalDateTime now = LocalDateTime.now();
+		String timecompleted = "" + dtf.format(now);
+    	
+    	tempTask.add(taskList.get(position).get(0));
+    	tempTask.add(taskList.get(position).get(1));
+    	tempTask.add(taskList.get(position).get(2));
+    	tempTask.add(taskList.get(position).get(3));
+    	tempTask.add(timecompleted);
+    	
+    	taskList.set(position, tempTask);
+    	
+    	System.out.println(taskList.get(position));
+    	
+    	
+    	//taskList.set(position, Task);
+    	Tomo.taskCompleted(taskList.get(position).get(3).toString(),taskList.get(position).get(4).toString());
     }
     
 }
