@@ -26,7 +26,6 @@ public class TasksModel{
 		String priority = currTask.get(1);
 		String date = currTask.get(2);
 		
-		MainController.updateUpdatesList("Task removed.");
 		System.out.println("Task Deleted: " + currTask);
 		
 		//begin code

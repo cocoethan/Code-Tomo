@@ -68,7 +68,7 @@ public class Tomo implements Initializable{
 	
 	//Executes when task is deleted
 	public static void taskDeleted() {
-		MainController.updateUpdatesList("Task removed.");
+		MainController.updateUpdatesList("Task removed.");//Execute this to update updates-list below tamagotchi
 	}
 	
 	//Executes when task is completed
