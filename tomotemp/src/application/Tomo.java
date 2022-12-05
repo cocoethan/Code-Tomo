@@ -75,4 +75,16 @@ public class Tomo implements Initializable{
 	public static void taskCompleted(String timeAdded, String timeCompleted) {//timeAdded/timeCompleted are strings of format "YYYY-MM-DD-HR:MN" describing time task was added and deleted
 		
 	}
+	
+	public static void alarmAdded() {
+		
+	}
+	
+	public static void alarmDeleted() {
+		
+	}
+	
+	public static void alarmChecked() {//runs when alarm goes off and is responded to
+		
+	}
 }

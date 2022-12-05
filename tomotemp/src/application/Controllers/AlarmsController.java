@@ -15,8 +15,10 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import application.Tomo;
 import application.Controllers.AlarmsController;
 import application.Controllers.AlarmsController.Cell;
+import application.models.AlarmModel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -258,6 +260,8 @@ public class AlarmsController implements Initializable{
 				alarmsListView.getItems().add(titleS);
 				
 				System.out.println(timeC);
+				
+				AlarmModel.addAlarmToDB(Alarm);
 			}
     		//alarmsListView.getItems().add(titleS);
     		
@@ -269,6 +273,8 @@ public class AlarmsController implements Initializable{
     }
     
     static void deleteAlarm(int position) {
+    	List<String> temp = alarmList.get(position);
+    	AlarmModel.removeAlarmToDB(temp);
     	alarmList.remove(position);
     }
     
@@ -382,7 +388,7 @@ public class AlarmsController implements Initializable{
 			Optional<ButtonType> clickedButton = dialog.showAndWait();
 			
 			if(clickedButton.get() == ButtonType.FINISH) {
-					
+					Tomo.alarmChecked();
 			}
 		}catch(IOException e1) {
 			e1.printStackTrace();
