@@ -1,0 +1,9 @@
+Commit 9
+
+Ethan Coco{
+	1. Check for duplicate Tasks
+}
+
+Lane Deese{
+	1. Add DB functionality for adding and removing tasks
+}

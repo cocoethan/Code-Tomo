@@ -1,5 +1,8 @@
 package application;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +21,7 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/mainFrame.fxml"));
 			Scene scene = new Scene(root, 1280, 720);
 			primaryStage.setTitle("Test");
+			//scene.getStylesheets().add("/resources/css/list-view-cell-gap.css");
 			primaryStage.setScene(scene);//Setting View (MVC Model)
 			primaryStage.show();
 			
@@ -33,6 +37,23 @@ public class Main extends Application {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		Database db = new Database();
+		ResultSet rs;
+		try {
+			rs = db.displayUsers();
+			while(rs.next()) {
+				System.out.println(rs.getString("userName") + " ");
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		launch(args);
+		
 	}
 }
+//test
