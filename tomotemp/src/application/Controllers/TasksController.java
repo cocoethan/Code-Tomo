@@ -221,6 +221,7 @@ public class TasksController{
     }
     
     static void deleteTask(int position) {
+    	System.out.println("POSITION: " + position);
     	TasksModel.deleteTaskToDB(taskList.get(position));
     	taskList.remove(position);
     	

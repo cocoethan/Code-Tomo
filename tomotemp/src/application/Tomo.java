@@ -45,7 +45,7 @@ public class Tomo implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		//Update tomo progress from current progress in Database
 	}
 	
 	//Executes when new task is added
