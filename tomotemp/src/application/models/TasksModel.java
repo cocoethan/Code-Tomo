@@ -1,7 +1,5 @@
 package application.models;
 
-import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
 
@@ -9,7 +7,7 @@ import application.Database;
 import application.Controllers.MainController;
 
 public class TasksModel{
-	public static void addNewTaskToDB(List<String> currTask) throws SQLException {
+	public static void addNewTaskToDB(List<String> currTask) {
 		String name = currTask.get(0);
 		String priority = currTask.get(1);
 		String date = currTask.get(2);
@@ -19,15 +17,8 @@ public class TasksModel{
 		
 		//begin code
 		//FOR LANE DEESE
-		if(date == null) {
-			
-
-			Database.placeReminder(name, null, null , null, priority);
-		}
-		else {
-			Date locDate = Date.valueOf(date);
-			Database.placeReminder(name, null, null , locDate, priority);
-		}
+		//Database.placeAlarm(null, null, null);
+		
 	}
 	
 	public static void deleteTaskToDB(List<String> currTask) {
@@ -36,14 +27,7 @@ public class TasksModel{
 		String date = currTask.get(2);
 		
 		System.out.println("Task Deleted: " + currTask);
-		try {
-			Database.removeReminder(name);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		MainController.updateUpdatesList("Task removed.");
-		System.out.println("Task Deleted: " + currTask);
+		
 		//begin code
 		
 		

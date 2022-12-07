@@ -155,19 +155,40 @@ public class Database {
 		
 	}
 	
-	public static void getAlarm() throws SQLException {
+	public static String[] getAlarmID() throws SQLException {
 		PreparedStatement p = null;
 		ResultSet rs = null;
+		String[] id = new String[300];
+		int i = 0;
 		String sql = "select * from alarm;";
 		p = conn.prepareStatement(sql);
 		rs = p.executeQuery();
 		 while (rs.next()) {
 			 String aID = rs.getString("alarmID");
+			 id[i] = aID;
+			 i++;
 			 String days= rs.getString("repeatDays"); 
 			 Time time = rs.getTime("alarmTime");
 			 Date date = rs.getDate("alarmDate");
 		 }
+		return id;
 		}
+	public static Time[] getAlarmTime() throws SQLException {
+		PreparedStatement p = null;
+		ResultSet rs = null;
+		Time[] t = new Time[300];
+		int i = 0;
+		String sql = "select * from alarm;";
+		p = conn.prepareStatement(sql);
+		rs = p.executeQuery();
+		 while (rs.next()) {
+			 Time time = rs.getTime("alarmTime");
+			 t[i] = time;
+			 i++;
+
+		 }
+		 return t;
+	}
 	public static String retrieveTamoValues(int i) throws SQLException {
 		
 		PreparedStatement p = null;
@@ -267,4 +288,3 @@ public class Database {
 		 return rPrio;
 	}
 }
-

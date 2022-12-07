@@ -2,6 +2,8 @@ package application;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	
+	static String currTime;
+	
 	/**
 	 * Loads, creates, and sets UI view
 	 *@author Ethan Coco
@@ -24,6 +29,19 @@ public class Main extends Application {
 			//scene.getStylesheets().add("/resources/css/list-view-cell-gap.css");
 			primaryStage.setScene(scene);//Setting View (MVC Model)
 			primaryStage.show();
+			
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+			LocalDateTime now = LocalDateTime.now();
+			//System.out.println(dtf.format(now));
+			
+			
+			//Thread clock = new Thread(){
+			    //public void run(){
+			      //System.out.println("Thread Running");
+			      //currTime = dtf.format(now);
+			    //}
+			//};
+			//clock.start();
 			
 			//Controller.tasksListView.setCellFactory(param -> new Controller.Cell());
 		} catch(Exception e) {

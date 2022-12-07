@@ -3,7 +3,6 @@ package application;
 import java.io.IOException;
 import java.lang.ModuleLayer.Controller;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.Controllers.MainController;
@@ -46,43 +45,24 @@ public class Tomo implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		//Update tomo progress from current progress in Database
 	}
 	
 	//Executes when new task is added
-	public static void taskAdded() throws SQLException {
+	public static void taskAdded() {
 		MainController.updateUpdatesList("New task added.");//Execute this to update updates-list below tamagotchi
 		//Start ->
 		//Added just for reference, please add your own with different logic
-		points = Integer.parseInt(Database.retrieveTamoValues(3)) + 2;
-		Database.editTamo(1, String.valueOf(2));
-		MainController.updatePointsCounter(points.toString()); // edit pts
-		health = Double.parseDouble(Database.retrieveTamoValues(2)) + 10;
-		Database.editTamo(2, String.valueOf(10));
-		MainController.updateHealthBar(health);//edit health
-		hunger = Double.parseDouble(Database.retrieveTamoValues(5)) + 20;
-		Database.editTamo(5, String.valueOf(20));
-		MainController.updateHungerBar(hunger);//edit hunger
-		happy = Double.parseDouble(Database.retrieveTamoValues(5)) + 3;
-		Database.editTamo(4, String.valueOf(20));
+		points = 1;
+		MainController.updatePointsCounter(points.toString());
+		health = 0.4;
+		MainController.updateHealthBar(health);
+		hunger = 0.3;
+		MainController.updateHungerBar(hunger);
+		happy = 0.8;
 		MainController.updateHappyBar(happy);
-		if(hunger == 90 && happy >= 80) {
-			Database.editTamo(3, tastyGIF);
-			MainController.updateImg(tastyGIF);
-		}
-		if(health <= 10) {
-			Database.editTamo(3, deathGIF);
-			MainController.updateImg(deathGIF);
-
-		}
-		if(happy < 40) {
-			Database.editTamo(3, angryGIF);
-			MainController.updateImg(angryGIF);
-		}
-		else {
-			Database.editTamo(3, smileBlinkingGIF);
-			MainController.updateImg(smileBlinkingGIF);
-		}
+		
+		MainController.updateImg(deathGIF);
 		//<- End
 	}
 	
@@ -93,6 +73,18 @@ public class Tomo implements Initializable{
 	
 	//Executes when task is completed
 	public static void taskCompleted(String timeAdded, String timeCompleted) {//timeAdded/timeCompleted are strings of format "YYYY-MM-DD-HR:MN" describing time task was added and deleted
+		
+	}
+	
+	public static void alarmAdded() {
+		
+	}
+	
+	public static void alarmDeleted() {
+		
+	}
+	
+	public static void alarmChecked() {//runs when alarm goes off and is responded to
 		
 	}
 }

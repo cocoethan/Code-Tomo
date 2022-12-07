@@ -2,7 +2,6 @@ package application.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -138,7 +137,7 @@ public class TasksController{
     }
     
     @FXML
-    void addNewTask(ActionEvent event) throws SQLException {
+    void addNewTask(ActionEvent event) {
     	priorChoiceCheck = 0;
     	priorChoiceBoxToInt = 0;
     	
@@ -222,6 +221,7 @@ public class TasksController{
     }
     
     static void deleteTask(int position) {
+    	System.out.println("POSITION: " + position);
     	TasksModel.deleteTaskToDB(taskList.get(position));
     	taskList.remove(position);
     	
