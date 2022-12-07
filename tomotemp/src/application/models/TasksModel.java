@@ -1,6 +1,12 @@
 package application.models;
 
+import java.sql.SQLException;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+//import java.sql.Date;
 import java.util.List;
 
 import application.Database;
@@ -11,25 +17,44 @@ public class TasksModel{
 		String name = currTask.get(0);
 		String priority = currTask.get(1);
 		String date = currTask.get(2);
+		Date date1 = new Date();
+		
+		try {
+			date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		java.sql.Date date2 = new java.sql.Date(date1.getTime());
+		
+		//System.out.println(date2.toString());
 		
 		//MainController.updateUpdatesList("New task added.");
 		System.out.println("Task Added: " + currTask);
 		
-		//begin code
-		//FOR LANE DEESE
-		//Database.placeAlarm(null, null, null);
+		try {
+			Database.placeReminder(name, null, null, date2, priority);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
 	public static void deleteTaskToDB(List<String> currTask) {
 		String name = currTask.get(0);
-		String priority = currTask.get(1);
-		String date = currTask.get(2);
+		//String priority = currTask.get(1);
+		//String date = currTask.get(2);
 		
 		System.out.println("Task Deleted: " + currTask);
 		
-		//begin code
-		
+		try {
+			Database.removeReminder(name);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

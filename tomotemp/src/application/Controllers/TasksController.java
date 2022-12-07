@@ -140,6 +140,7 @@ public class TasksController{
     void addNewTask(ActionEvent event) {
     	priorChoiceCheck = 0;
     	priorChoiceBoxToInt = 0;
+    	int flag = 0;
     	
     	//Task currTask = new Task();
     	Task = new ArrayList<>();
@@ -162,8 +163,9 @@ public class TasksController{
 					tasksListView.setCellFactory(param -> new Cell());
 				}
 				startCheck = 1;
-				tTitleTextFieldToString = tController.tTitleTextField.getText();
 				
+				
+				tTitleTextFieldToString = tController.tTitleTextField.getText();
 				//Add name to Task array
 				
 				Task.add(tController.tTitleTextField.getText());//Add name to task array
@@ -204,15 +206,36 @@ public class TasksController{
 				Task.add(timeadded);
 				Task.add("0000-00-00-00:00");
 				
-				taskList.add(Task);
-				tasksListView.getItems().add(tController.tTitleTextField.getText());
+				//System.out.println("HERE: " + tTitleTextFieldToString);
+				
+				for(int i = 0; i < taskList.size(); i++) {
+					if(Task.get(0).equals(taskList.get(i).get(0))) {
+						flag = 1;
+					}
+				}
+				
+				if(tTitleTextFieldToString.isBlank() == true || flag == 1) {
+					if(flag == 1) {
+						MainController.updateUpdatesList("Error adding task: task has a duplicate title.");
+					}else {
+						MainController.updateUpdatesList("Error adding task: task must have a title.");
+					}
+					//System.out.println("Error");
+					//MainController.updateUpdatesList("Error adding task: task must have a title.");
+				}else {
+					taskList.add(Task);
+					tasksListView.getItems().add(tController.tTitleTextField.getText());
+					TasksModel.addNewTaskToDB(Task);
+					Tomo.taskAdded();
+				}
 				
 				//!!! FOR LANE DEESE
 				//Start Add Task to Database from controller
-				TasksModel.addNewTaskToDB(Task);
 				//End AddTask to Database from controller
 			}
-			Tomo.taskAdded();
+			if(flag == 0) {
+				//Tomo.taskAdded();
+			}
 			
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block

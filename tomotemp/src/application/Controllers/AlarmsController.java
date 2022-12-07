@@ -123,6 +123,9 @@ public class AlarmsController implements Initializable{
     	currHr = hrs.getValue();
     	currMn = mns.getValue();
     	currAmPm = aps.getValue();
+    	
+    	
+    	
     }
     
     static class Cell extends ListCell<String>{
@@ -197,8 +200,8 @@ public class AlarmsController implements Initializable{
     
     @FXML
     void addAlarm(ActionEvent event) {
-    	System.out.println("Success");
-    	
+    	//System.out.println("Success");
+    	int flag = 0;
     	Alarm = new ArrayList<>();
     	
     	try {
@@ -241,27 +244,43 @@ public class AlarmsController implements Initializable{
 					timeC = timeC + "" + controller.mns.getValue();
 				}
 				
+				//titleS = "" + controller.textfield.getText();
 				
-				if(controller.textfield.getText().isEmpty() == false) {
-					titleS = "" + controller.textfield.getText();
-				}else {
-					titleS = "Alarm " + counter;
-					counter++;
+				String tempstr = controller.textfield.getText();
+				
+				for(int i = 0; i < alarmList.size(); i++) {
+					if(tempstr.equals(alarmList.get(i).get(1))) {
+						flag = 1;
+					}
 				}
 				
-				System.out.println(timeS);
-				System.out.println(timeC);
+				if(controller.textfield.getText().isEmpty() == true || flag == 1) {
+					//titleS = "" + controller.textfield.getText();
+					if(flag == 1) {
+						MainController.updateUpdatesList("Error adding alarm: alarm has a duplicate title.");
+					}else {
+						MainController.updateUpdatesList("Error adding alarm: alarm must have a title.");
+					}
+				}else {
+					//titleS = "Alarm " + counter;
+					//counter++;
+					
+					titleS = "" + controller.textfield.getText();
+					
+					Alarm.add(timeS);
+					Alarm.add(titleS);
+					Alarm.add(timeC);
+					
+					alarmList.add(Alarm);
+					alarmsListView.getItems().add(titleS);
+					
+					//System.out.println(timeC);
+					
+					AlarmModel.addAlarmToDB(Alarm);
+				}
 				
-				Alarm.add(timeS);
-				Alarm.add(titleS);
-				Alarm.add(timeC);
-				
-				alarmList.add(Alarm);
-				alarmsListView.getItems().add(titleS);
-				
-				System.out.println(timeC);
-				
-				AlarmModel.addAlarmToDB(Alarm);
+				//System.out.println(timeS);
+				//System.out.println(timeC);
 			}
     		//alarmsListView.getItems().add(titleS);
     		

@@ -97,7 +97,7 @@ public class MainController implements Initializable{
     
     static ImageView imageViewS;
     
-    static String imgCat = "/resources/images/sleeping.gif"; //FOR SEAN! //Default start image
+    static String imgCat = "/resources/images/birth.gif";
     
     Image image = new Image(getClass().getResourceAsStream(imgCat));
     
