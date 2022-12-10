@@ -2,6 +2,8 @@ package application.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import application.Database;
 import application.Tomo;
 import application.Controllers.AlarmsController;
 import application.Controllers.AlarmsController.Cell;
@@ -108,21 +111,63 @@ public class AlarmsController implements Initializable{
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-    	
-    	SpinnerValueFactory<Integer> valueFacHrs = new SpinnerValueFactory.IntegerSpinnerValueFactory(01, 12);
-    	valueFacHrs.setValue(01);
-    	SpinnerValueFactory<Integer> valueFacMins = new SpinnerValueFactory.IntegerSpinnerValueFactory(00, 59);
-    	valueFacMins.setValue(00);
-    	SpinnerValueFactory<String> valueFacAmPm = new SpinnerValueFactory.ListSpinnerValueFactory<>(list);
-    	valueFacAmPm.setValue("AM");
-    	
-    	hrs.setValueFactory(valueFacHrs);
-    	mns.setValueFactory(valueFacMins);
-    	aps.setValueFactory(valueFacAmPm);
-    	
-    	currHr = hrs.getValue();
-    	currMn = mns.getValue();
-    	currAmPm = aps.getValue();
+    	List<List<String>> alarmList = new ArrayList<>();
+ 
+    		SpinnerValueFactory<Integer> valueFacHrs = new SpinnerValueFactory.IntegerSpinnerValueFactory(01, 12);
+        	valueFacHrs.setValue(01);
+        	SpinnerValueFactory<Integer> valueFacMins = new SpinnerValueFactory.IntegerSpinnerValueFactory(00, 59);
+        	valueFacMins.setValue(00);
+        	SpinnerValueFactory<String> valueFacAmPm = new SpinnerValueFactory.ListSpinnerValueFactory<>(list);
+        	valueFacAmPm.setValue("AM");
+        	
+        	hrs.setValueFactory(valueFacHrs);
+        	mns.setValueFactory(valueFacMins);
+        	aps.setValueFactory(valueFacAmPm);
+        	
+        	currHr = hrs.getValue();
+        	currMn = mns.getValue();
+        	currAmPm = aps.getValue();	
+        	String[] aID = null; 
+        	String[] time= null;
+        	int i = 0;
+        	try {
+			aID = Database.getAlarmID();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	try {
+			time = Database.getAlarmTime();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        while(time[i] != null) {
+        	ArrayList<String> curr = new ArrayList<>();
+        	curr.add(time[i]);
+        	curr.add(aID[i]);
+        	alarmList.add(curr);
+        	i++;
+        }
+        //Just add this section to tasks controller
+       /* 
+        List<List<String>> reminderList = new ArrayList<>();
+        String[] rID = null;
+        String[] prio = null;
+        String[] date = null;
+        rID = Database.getReminderID();
+        prio = Database.getReminderPriority();
+        date = Database.getReminderDate();
+        int i=0;
+        while(rID[i] != null) {
+        	ArrayList<String> curr = new ArrayList<>();
+        	curr.add(rID[i]);
+        	curr.add(prio[i]);
+        	curr.add(date[i]);
+        	alarmList.add(curr);
+        	i++;
+        }
+    	*/
     }
     
     static class Cell extends ListCell<String>{
@@ -149,7 +194,12 @@ public class AlarmsController implements Initializable{
     		
     		deleteBtn.setOnAction(e -> {
     			getListView().getSelectionModel().select(getItem());
-    			deleteAlarm(getListView().getSelectionModel().getSelectedIndex());
+    			try {
+					deleteAlarm(getListView().getSelectionModel().getSelectedIndex());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
     			getListView().getItems().remove(getItem());
     		});
     		
@@ -196,7 +246,7 @@ public class AlarmsController implements Initializable{
     
     
     @FXML
-    void addAlarm(ActionEvent event) {
+    void addAlarm(ActionEvent event) throws SQLException {
     	System.out.println("Success");
     	
     	Alarm = new ArrayList<>();
@@ -272,7 +322,7 @@ public class AlarmsController implements Initializable{
     	
     }
     
-    static void deleteAlarm(int position) {
+    static void deleteAlarm(int position) throws SQLException {
     	List<String> temp = alarmList.get(position);
     	AlarmModel.removeAlarmToDB(temp);
     	alarmList.remove(position);

@@ -53,8 +53,9 @@ public class Main extends Application {
 	 * Launches application
 	 * @author Ethan Coco
 	 * @param args
+	 * @throws SQLException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		Database db = new Database();
 		ResultSet rs;
 		try {
@@ -69,9 +70,9 @@ public class Main extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		launch(args);
-		
+		Database.connClose();
+
 	}
 }
 //test

@@ -43,7 +43,7 @@ public class Database {
 				baseId.setString(2, userName);
 				baseId.execute();
 				state2.executeUpdate("CREATE TABLE alarm(alarmID varchar(20)," + "repeatDays varchar(9)," 
-						+ "alarmTime time(7)," + "alarmDate date," + "userID integer," + "PRIMARY KEY(alarmID)," 
+						+ "alarmTime varchar(8)," + "alarmDate date," + "userID integer," + "PRIMARY KEY(alarmID)," 
 						+ "FOREIGN KEY (userID) REFERENCES user(userID));");
 				state2.executeUpdate("CREATE TABLE reminder(reminderID varchar(20)," + "repeatDays varchar(9)," 
 						+ "reminderTime time(7)," + "reminderDate varchar(10)," + "userID integer," + "priority varchar(10),"+ "PRIMARY KEY(reminderID)," 
@@ -60,29 +60,34 @@ public class Database {
 	}
 	
 	
-	public static void placeAlarm(String aID, String days, Time time, Date date) throws SQLException {
+	public static void placeAlarm(String aID, String days, String time, Date date) throws SQLException {
 		PreparedStatement baseId = conn.prepareStatement("INSERT INTO alarm values(?,?,?,?,?);");
 		baseId.setString(1, aID);
 		baseId.setString(2, days);
-		baseId.setTime(3, time);
+		baseId.setString(3, time);
 		baseId.setDate(4, date);
 		baseId.setInt(5, 1);
 		baseId.execute();
 	}
 	
-    public static void placeReminder(String rID, String days, Time time, Date date, String priority) throws SQLException {
+    public static void placeReminder(String rID, String days, Time time, String date, String priority) throws SQLException {
 		PreparedStatement baseId = conn.prepareStatement("INSERT INTO reminder values(?,?,?,?,?,?);");
 		baseId.setString(1, rID);
 		baseId.setString(2, days);
 		baseId.setTime(3, time);
-		baseId.setDate(4, date);
+		baseId.setString(4, date);
 		baseId.setInt(5, 1);
 		baseId.setString(6, priority);
-		baseId.execute();
+		baseId.executeLargeUpdate();
 	}
 	public static void removeReminder(String rID) throws SQLException {
 		Statement state = conn.createStatement();
 		state.execute("DELETE FROM reminder WHERE reminderID='" + rID + "';");
+		
+	}
+	public static void removeAlarm(String time) throws SQLException {
+		Statement state = conn.createStatement();
+		state.execute("DELETE FROM alarm WHERE reminderID='" + time + "';");
 		
 	}
 	public static void generateTamo(String tID, String type, String mood) throws SQLException {
@@ -95,7 +100,7 @@ public class Database {
 		baseId.setInt(6, 1);
 		baseId.setInt(7, 0);
 		baseId.setInt(8, 0);
-		baseId.execute();
+		baseId.executeUpdate();
 	}
 	public static void editTamo(int i, String input) throws SQLException {
 		PreparedStatement p = null;
@@ -112,7 +117,7 @@ public class Database {
 			currVal = currVal + Integer.parseInt(input);
 			sql = "update tamo SET tamoPts = "+ currVal +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
 		case 2:
 			sql = "select tamoHealth from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
@@ -127,21 +132,21 @@ public class Database {
 			}
 			sql = "update tamo SET tamoHealth = "+ currVal +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
 		case 3:
 			sql = "select tamoMood from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
 			rs = p.executeQuery();
 			sql = "update tamo SET tamoMood = "+ input +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
 		case 4:
 			sql = "select tamoOvrPts from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
 			rs = p.executeQuery();
 			sql = "update tamo SET tamoOvrPts = "+ input +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
 		case 5:
 			sql = "select tamoHunger from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
@@ -150,7 +155,7 @@ public class Database {
 			currVal = currVal + Integer.parseInt(input);
 			sql = "update tamo SET tamoHunger = "+ currVal +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
 		}
 		
 	}
@@ -173,16 +178,16 @@ public class Database {
 		 }
 		return id;
 		}
-	public static Time[] getAlarmTime() throws SQLException {
+	public static String[] getAlarmTime() throws SQLException {
 		PreparedStatement p = null;
 		ResultSet rs = null;
-		Time[] t = new Time[300];
+		String[] t = new String[300];
 		int i = 0;
 		String sql = "select * from alarm;";
 		p = conn.prepareStatement(sql);
 		rs = p.executeQuery();
 		 while (rs.next()) {
-			 Time time = rs.getTime("alarmTime");
+			 String time = rs.getString("alarmTime");
 			 t[i] = time;
 			 i++;
 
@@ -235,7 +240,7 @@ public class Database {
 		rs = p.executeQuery();
 		 while (rs.next()) {
 			 String rID = rs.getString("reminderID");
-			 Date date= rs.getDate("reminderDate"); 
+			 String date= rs.getString("reminderDate"); 
 			 String priority = rs.getString("priority");
 			// System.out.println("rID:" + rID + " date: " + " priority: " + priority);
 		 }
@@ -256,8 +261,8 @@ public class Database {
 		 return rIDArr;
 	}
 	
-	public static Date[] getReminderDate() throws SQLException {
-		Date[] rDate = new Date[300];
+	public static String[] getReminderDate() throws SQLException {
+		String[] rDate = new String[300];
 		int i = 0;
 		PreparedStatement p = null;
 		ResultSet rs = null;
@@ -265,7 +270,7 @@ public class Database {
 		p = conn.prepareStatement(sql);
 		rs = p.executeQuery();
 		 while (rs.next()) {
-			 Date date= rs.getDate("reminderDate");
+			 String date= rs.getString("reminderDate");
 			 rDate[i] = date;
 			 i++;
 		 }
@@ -286,5 +291,8 @@ public class Database {
 			 i++;
 		 }
 		 return rPrio;
+	}
+	public static void connClose() throws SQLException {
+		conn.close();
 	}
 }

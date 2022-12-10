@@ -2,6 +2,7 @@ package application.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -102,7 +103,12 @@ public class TasksController{
     		tasksListViewDeleteBtn.setOnAction(e -> {
     			getListView().getSelectionModel().select(getItem());
     			//System.out.println(getListView().getSelectionModel().getSelectedIndex() + "");
-    			deleteTask(getListView().getSelectionModel().getSelectedIndex());
+    			try {
+					deleteTask(getListView().getSelectionModel().getSelectedIndex());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
     			getListView().getItems().remove(getItem());
     		});
     		c.setOnAction(e ->{
@@ -137,7 +143,7 @@ public class TasksController{
     }
     
     @FXML
-    void addNewTask(ActionEvent event) {
+    void addNewTask(ActionEvent event) throws SQLException {
     	priorChoiceCheck = 0;
     	priorChoiceBoxToInt = 0;
     	
@@ -220,7 +226,7 @@ public class TasksController{
 			}
     }
     
-    static void deleteTask(int position) {
+    static void deleteTask(int position) throws SQLException {
     	System.out.println("POSITION: " + position);
     	TasksModel.deleteTaskToDB(taskList.get(position));
     	taskList.remove(position);
