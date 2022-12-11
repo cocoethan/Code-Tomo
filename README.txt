@@ -10,4 +10,4 @@ Instructions to execute jar file -
 7. Enjoy!
 Instructions to run source code in IDE -
 1. Download JavaFX on your system
-2. Include JavaFX SDK Library, JRE System Library (above Java-SE 12), and JavaFX lib folder jars in MODULEPATH
+2. Include JavaFX SDK Library, JRE System Library (above Java-SE 12), and JavaFX lib folder jars in project's MODULEPATH
