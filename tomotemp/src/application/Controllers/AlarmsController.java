@@ -48,6 +48,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 
+//MVC Controller for Alarms Scene
+
 public class AlarmsController implements Initializable{
 
 	static List<String> Alarm = new ArrayList<>();
@@ -108,10 +110,9 @@ public class AlarmsController implements Initializable{
     private int startCheck = 0;
     
     private int startCheck1 = 0;
-    //int threadcount = 0;
     
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) {//Set alarm spinners and values / update lists with current database info
     	
     	SpinnerValueFactory<Integer> valueFacHrs = new SpinnerValueFactory.IntegerSpinnerValueFactory(01, 12);
     	valueFacHrs.setValue(01);
@@ -128,9 +129,7 @@ public class AlarmsController implements Initializable{
     	currMn = mns.getValue();
     	currAmPm = aps.getValue();
     	
-    	System.out.println(alarmList.size());
     	for(int i = 0; i < alarmList.size(); i++) {
-    		System.out.println(alarmList.get(i).get(0));
     		if(alarmList.get(i) != null) {
     			if(alarmsListView != null) {
     				alarmsListView.getItems().add(alarmList.get(i).get(1));
@@ -147,7 +146,7 @@ public class AlarmsController implements Initializable{
     	
     }
     
-    public static void databaseIn() {
+    public static void databaseIn() {//Fill listviews with current database info
     		List<String> dbAlarm = new ArrayList<>();
     		Time[] alarmTimes = null;
     		String[] alarmTitles = null;
@@ -159,12 +158,9 @@ public class AlarmsController implements Initializable{
     			alarmTimes = Database.getAlarmTime();
     			for(int i = 0; i < alarmTimes.length; i++) {
     				if(alarmTimes[i] != null) {
-    					System.out.println(alarmTimes[i].toString());
     				}
     			}
-    			//System.out.println(alarmTimes.toString());
     		} catch (SQLException e) {
-    			// TODO Auto-generated catch block
     			e.printStackTrace();
     		}
     		
@@ -177,7 +173,6 @@ public class AlarmsController implements Initializable{
     				}
     			}
     		} catch (SQLException e) {
-    			// TODO Auto-generated catch block
     			e.printStackTrace();
     		}
 
@@ -190,7 +185,6 @@ public class AlarmsController implements Initializable{
     			if(alarmTitles[i] != null) {
     				dbAlarm.add(alarmTitles[i]);
     				Alarm.add(alarmTitles[i]);
-    				//dbTask.add("0000-00-00");
     			}
     			
     			if(alarmTimes[i] != null) {
@@ -201,8 +195,6 @@ public class AlarmsController implements Initializable{
     				dbAlarm.add(nw1);
     				Alarm.add(nw1);
     			}
-    			
-    			//dbTask.add("0000-00-00");
     			if(alarmTitles[i] != null) {
     				alarmList.add(dbAlarm);
     			}
@@ -210,20 +202,19 @@ public class AlarmsController implements Initializable{
 
 	}
     
-    static class Cell extends ListCell<String>{
+    static class Cell extends ListCell<String>{//Cell design used for listview
     
     	HBox hbox = new HBox();
     	Pane pane = new Pane();
     	
     	RadioButton toggle = new RadioButton();
-    	//CheckBox toggle = new CheckBox();
     	Label time = new Label("");
     	Label title = new Label("");
     	Label spaceLbl = new Label(" ");
     	Label spaceLbl2 = new Label("  ");
     	Button deleteBtn = new Button("Delete");
     	
-    	public Cell() {
+    	public Cell() {//set cell data
     		super();
     		
     		title.setFont(new Font("Arial",15));
@@ -244,33 +235,22 @@ public class AlarmsController implements Initializable{
     				activeAlarm(getListView().getSelectionModel().getSelectedIndex());
     				System.out.println("test");
     			}else if(toggle.isSelected() == false){
-    				//remove alarm
-    				//getListView().getSelectionModel().select(getItem());
     				deactiveAlarm(getListView().getSelectionModel().getSelectedIndex());
     			}
     		});
-    		/*
-    		toggle.setOnAction(e -> {
-    			getListView().getSelectionModel().select(getItem());
-    			activeAlarm(getListView().getSelectionModel().getSelectedIndex());
-    		});*/
     	}
     	
-    	public void updateItem(String name, boolean empty) {
+    	public void updateItem(String name, boolean empty) {//update cells with info
     		super.updateItem(name, empty);
     		setText(null);
     		setGraphic(null);
     		
     		if(name != null && !empty) {
-    			
-    			//getListView().getSelectionModel().select(getItem());
-    			//time.setText(alarmList.get(getListView().getSelectionModel().getSelectedIndex()).get(0));
     			for(int i = 0; i < alarmList.size(); i++) {
     				if(alarmList.get(i).get(1).equals(name) == true) {
     					time.setText(alarmList.get(i).get(0));
     				}
     			}
-    			//time.setText(Alarm.get(0));
     			title.setText(name);
     			
     			setGraphic(hbox);
@@ -281,8 +261,7 @@ public class AlarmsController implements Initializable{
     
     
     @FXML
-    void addAlarm(ActionEvent event) {
-    	//System.out.println("Success");
+    void addAlarm(ActionEvent event) {//add alarms executed through fxml
     	int flag = 0;
     	Alarm = new ArrayList<>();
     	
@@ -326,8 +305,6 @@ public class AlarmsController implements Initializable{
 					timeC = timeC + "" + controller.mns.getValue();
 				}
 				
-				//titleS = "" + controller.textfield.getText();
-				
 				String tempstr = controller.textfield.getText();
 				
 				for(int i = 0; i < alarmList.size(); i++) {
@@ -337,15 +314,12 @@ public class AlarmsController implements Initializable{
 				}
 				
 				if(controller.textfield.getText().isEmpty() == true || flag == 1) {
-					//titleS = "" + controller.textfield.getText();
 					if(flag == 1) {
 						MainController.updateUpdatesList("Error adding alarm: alarm has a duplicate title.");
 					}else {
 						MainController.updateUpdatesList("Error adding alarm: alarm must have a title.");
 					}
 				}else {
-					//titleS = "Alarm " + counter;
-					//counter++;
 					
 					titleS = "" + controller.textfield.getText();
 					
@@ -356,30 +330,23 @@ public class AlarmsController implements Initializable{
 					alarmList.add(Alarm);
 					alarmsListView.getItems().add(titleS);
 					
-					//System.out.println(timeC);
-					
 					AlarmModel.addAlarmToDB(Alarm);
 				}
-				
-				//System.out.println(timeS);
-				//System.out.println(timeC);
 			}
-    		//alarmsListView.getItems().add(titleS);
     		
     	} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
     	
     }
     
-    static void deleteAlarm(int position) {
+    static void deleteAlarm(int position) {//delete alarms
     	List<String> temp = alarmList.get(position);
     	AlarmModel.removeAlarmToDB(temp);
     	alarmList.remove(position);
     }
     
-    static void activeAlarm(int position) {
+    static void activeAlarm(int position) {//activate alarm
     	System.out.println("POS: " + position);
     	alarmTimer = new ArrayList<>();
     	String activeAlarm = "";
@@ -392,29 +359,29 @@ public class AlarmsController implements Initializable{
     	
     	timerlist.add(alarmTimer);
     	activeAlarms.add(activeAlarm);
-    	//sort
+
     	sortalarms();
     	
     	flag = 1;
     	alarm(activeAlarm);
     }
     
-    static void deactiveAlarm(int position) {
-    	//System.out.println("++" + position);
+    static void deactiveAlarm(int position) {//deactivate alarm
+
     	timerlist.remove(position);
     	
-    	//sort again
+
     	sortalarms();
     	
     	if(position == 0) {
     		flag = 0;
     		timer.cancel();
     		timercount = 0;
-    		//alarm(timerlist);
+
     	}
     }
     
-    static void sortalarms() {
+    static void sortalarms() {//sort alarms by closest alarm first
     	Collections.sort(activeAlarms);
     }
     
@@ -427,10 +394,6 @@ public class AlarmsController implements Initializable{
     		public void run() {
     			System.out.println("ALARM");
     			Date timeOn = new Date();
-    			//alarmOn();
-    			//Call popup
-    			//Store what time alarm is completed (timeOff)
-    			//Pass both these times to Tomo
     			timer.cancel();
     			Platform.runLater(new Runnable() {
     				@Override
@@ -440,13 +403,6 @@ public class AlarmsController implements Initializable{
     			});
     		}
     	};
-    	
-    	//if(timercount == 0) {
-    		//timer = new Timer();
-    	//}
-    	
-    	//if(list.size() > 0) {
-    		//for(int i = 0; i < list.size(); i++) {
     			timer = new Timer();
     			Date today = new Date();
             	Calendar cal = Calendar.getInstance();
@@ -467,12 +423,9 @@ public class AlarmsController implements Initializable{
             	System.out.println(currDate);
             	
             	timer.schedule(task, currDate);
-            	//timer.cancel();
-    		//}
-    	//}
     }
     
-    static void alarmOn() {
+    static void alarmOn() {//turn alarms on
     	System.out.println(activeAlarms);
     	if(activeAlarms.size() > 0) {
     		activeAlarms.remove(0);
@@ -489,7 +442,12 @@ public class AlarmsController implements Initializable{
 			Optional<ButtonType> clickedButton = dialog.showAndWait();
 			
 			if(clickedButton.get() == ButtonType.FINISH) {
-					Tomo.alarmChecked();
+					try {
+						Tomo.alarmChecked();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			}
 		}catch(IOException e1) {
 			e1.printStackTrace();
@@ -499,7 +457,5 @@ public class AlarmsController implements Initializable{
     	}
     
     }
-    //TODO:
-    //Tasks default name need to be task 1
     
 }
