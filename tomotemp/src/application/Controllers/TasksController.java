@@ -7,14 +7,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import application.Database;
 import application.Tomo;
 import application.Controllers.TasksController;
 import application.Controllers.TasksController.Cell;
 import application.models.TasksModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -47,7 +51,7 @@ import javafx.scene.text.Font;
 /**
  * @author Ethan Coco
  */
-public class TasksController{
+public class TasksController implements Initializable{
 
     @FXML
     private Button addTaskBtn;
@@ -65,6 +69,7 @@ public class TasksController{
     
     private int selectedTask;
     private int startCheck = 0;
+    private int startCheck1 = 0;
     static int priorChoiceCheck = 0;
     
     private String[] priorityChoiceBox = {"Low Priority", "Medium Priority", "High Priority"};
@@ -77,6 +82,10 @@ public class TasksController{
     static List<List<String>> taskList = new ArrayList<>(); //In conjunction with tasksListView, used to pass accurate values
     
     static List<String> tempTask = new ArrayList<>();
+    
+    static List<List<String>> dbTasks = new ArrayList<>();
+    
+    static ObservableList<String> mylist = FXCollections.observableArrayList();
     
     static class Cell extends ListCell<String>{
     	CheckBox c = new CheckBox();
@@ -103,12 +112,7 @@ public class TasksController{
     		tasksListViewDeleteBtn.setOnAction(e -> {
     			getListView().getSelectionModel().select(getItem());
     			//System.out.println(getListView().getSelectionModel().getSelectedIndex() + "");
-    			try {
-					deleteTask(getListView().getSelectionModel().getSelectedIndex());
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+    			deleteTask(getListView().getSelectionModel().getSelectedIndex());
     			getListView().getItems().remove(getItem());
     		});
     		c.setOnAction(e ->{
@@ -142,10 +146,78 @@ public class TasksController{
     	}
     }
     
+    public static void databaseIn() {
+		List<String> dbTask = new ArrayList<>();
+		String[] taskTitles = null;
+		Task = new ArrayList<>();
+		
+		try {
+			taskTitles = Database.getReminderID();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] taskPriors = null;
+		
+		try {
+			taskPriors = Database.getReminderPriority();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Date[] taskDates = null;
+		
+		for(int i = 0; i < taskTitles.length; i++) {
+			dbTask = new ArrayList<>();
+			if(taskTitles[i] != null) {
+				dbTask.add(taskTitles[i]);
+				Task.add(taskTitles[i]);
+			}
+			if(taskPriors[i] != null) {
+				dbTask.add(taskPriors[i]);
+				Task.add(taskPriors[i]);
+				//dbTask.add("0000-00-00");
+			}
+			if(taskDates == null) {
+				dbTask.add("0000-00-00");
+				Task.add("0000-00-00");
+			}
+			//dbTask.add("0000-00-00");
+			if(taskTitles[i] != null) {
+				taskList.add(dbTask);
+			}
+			
+			//mylist.add();
+		}
+	}
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    	System.out.println(taskList.size());
+    	for(int i = 0; i < taskList.size(); i++) {
+    		System.out.println(taskList.get(i).get(0));
+    		if(taskList.get(i) != null) {
+    			if(tasksListView != null) {
+    				tasksListView.getItems().add(taskList.get(i).get(0));
+    			}
+    			startCheck1 = 1;
+    		}
+    	}
+    	
+    	if(startCheck1 == 1) {
+    		if(tasksListView != null) {
+    			tasksListView.setCellFactory(param -> new Cell());
+    		}
+    	}
+    }
+    
     @FXML
-    void addNewTask(ActionEvent event) throws SQLException {
+    void addNewTask(ActionEvent event) {
     	priorChoiceCheck = 0;
     	priorChoiceBoxToInt = 0;
+    	int flag = 0;
     	
     	//Task currTask = new Task();
     	Task = new ArrayList<>();
@@ -168,8 +240,9 @@ public class TasksController{
 					tasksListView.setCellFactory(param -> new Cell());
 				}
 				startCheck = 1;
-				tTitleTextFieldToString = tController.tTitleTextField.getText();
 				
+				
+				tTitleTextFieldToString = tController.tTitleTextField.getText();
 				//Add name to Task array
 				
 				Task.add(tController.tTitleTextField.getText());//Add name to task array
@@ -210,15 +283,41 @@ public class TasksController{
 				Task.add(timeadded);
 				Task.add("0000-00-00-00:00");
 				
-				taskList.add(Task);
-				tasksListView.getItems().add(tController.tTitleTextField.getText());
+				//System.out.println("HERE: " + tTitleTextFieldToString);
+				
+				for(int i = 0; i < taskList.size(); i++) {
+					if(Task.get(0).equals(taskList.get(i).get(0))) {
+						flag = 1;
+					}
+				}
+				
+				if(tTitleTextFieldToString.isBlank() == true || flag == 1) {
+					if(flag == 1) {
+						MainController.updateUpdatesList("Error adding task: task has a duplicate title.");
+					}else {
+						MainController.updateUpdatesList("Error adding task: task must have a title.");
+					}
+					//System.out.println("Error");
+					//MainController.updateUpdatesList("Error adding task: task must have a title.");
+				}else {
+					taskList.add(Task);
+					tasksListView.getItems().add(tController.tTitleTextField.getText());
+					TasksModel.addNewTaskToDB(Task);
+					try {
+						Tomo.taskAdded();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				
 				//!!! FOR LANE DEESE
 				//Start Add Task to Database from controller
-				TasksModel.addNewTaskToDB(Task);
 				//End AddTask to Database from controller
 			}
-			Tomo.taskAdded();
+			if(flag == 0) {
+				//Tomo.taskAdded();
+			}
 			
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -226,12 +325,17 @@ public class TasksController{
 			}
     }
     
-    static void deleteTask(int position) throws SQLException {
+    static void deleteTask(int position) {
     	System.out.println("POSITION: " + position);
     	TasksModel.deleteTaskToDB(taskList.get(position));
     	taskList.remove(position);
     	
-    	Tomo.taskDeleted();
+    	try {
+			Tomo.taskDeleted();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     static void completeTask(int position) {
@@ -252,7 +356,12 @@ public class TasksController{
     	
     	
     	//taskList.set(position, Task);
-    	Tomo.taskCompleted(taskList.get(position).get(3).toString(),taskList.get(position).get(4).toString());
+    	try {
+			Tomo.taskCompleted(taskList.get(position).get(3).toString(),taskList.get(position).get(4).toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
 }

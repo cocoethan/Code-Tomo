@@ -5,13 +5,15 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import application.Controllers.AlarmsController;
+import application.Controllers.TasksController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class Main extends Application{
 	
 	static String currTime;
 	
@@ -53,9 +55,9 @@ public class Main extends Application {
 	 * Launches application
 	 * @author Ethan Coco
 	 * @param args
-	 * @throws SQLException 
 	 */
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) {
+		
 		Database db = new Database();
 		ResultSet rs;
 		try {
@@ -70,9 +72,12 @@ public class Main extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		TasksController.databaseIn();
+		AlarmsController.databaseIn();
+		
 		launch(args);
-		Database.connClose();
-
+		
 	}
 }
 //test
