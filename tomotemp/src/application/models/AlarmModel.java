@@ -33,12 +33,16 @@ public class AlarmModel {
 		
 		System.out.println("!: " + sqlTime);
 		
-		Tomo.alarmAdded();
+		try {
+			Tomo.alarmAdded();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		try {
 			Database.placeAlarm(name, null, sqlTime, null);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -46,12 +50,15 @@ public class AlarmModel {
 	public static void removeAlarmToDB(List<String> currAlarm) {
 		String name = currAlarm.get(1);
 		
-		Tomo.alarmDeleted();
-		
+		try {
+			Tomo.alarmDeleted();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			Database.removeAlarm(name);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
