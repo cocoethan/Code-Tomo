@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.lang.ModuleLayer.Controller;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.Controllers.MainController;
@@ -55,21 +56,65 @@ public class Tomo implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		MainController.updateImg(birth);
+		try {
+			points = Integer.valueOf(Database.retrieveTamoValues(3));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			health = Double.valueOf(Database.retrieveTamoValues(2));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			hunger = Double.valueOf(Database.retrieveTamoValues(5));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			happy = Double.valueOf(Database.retrieveTamoValues(6));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MainController.updatePointsCounter(points.toString());
+		MainController.updateHealthBar(health);
+		MainController.updateHungerBar(hunger);
+		MainController.updateHappyBar(happy);
 	}
 	
 	static void databaseIn() {
 		
+		
 	}
 	
 	//Executes when new task is added
-	public static void taskAdded() {
+	public static void taskAdded() throws SQLException {
 		MainController.updateUpdatesList("New task added.");//Execute this to update updates-list below tamagotchi
 		//Start ->
 		//Added just for reference, please add your own with different logic
 		
-		health+=0.2;
-		hunger+=0.3;
+		health+=0.1;
+		Database.editTamo(2, "0.1");
+		hunger+=0.2;
+		Database.editTamo(5, "0.2");
 		happy+=0.2;
+		Database.editTamo(4, "0.2");
 		MainController.updateHealthBar(health);
 		MainController.updateHungerBar(hunger);
 		MainController.updateHappyBar(happy);
@@ -78,6 +123,7 @@ public class Tomo implements Initializable{
 		
 		//energy to do tasks
 		hunger-=0.1;
+		Database.editTamo(5, "-0.1");
 		MainController.updateHungerBar(hunger);
 		
 		checkNumbers();
@@ -86,12 +132,16 @@ public class Tomo implements Initializable{
 	}
 	
 	//Executes when task is deleted
-	public static void taskDeleted() {
+	public static void taskDeleted() throws SQLException {
 		MainController.updateUpdatesList("Task removed.");//Execute this to update updates-list below tamagotchi
 
-		health -= 0.3;
-		hunger-=0.4;
-		happy-=0.3;
+		health -= 0.1;
+		Database.editTamo(2, "-0.1");
+
+		hunger-=0.1;
+		Database.editTamo(5, "-0.1");
+		happy-=0.2;
+		Database.editTamo(4, "-0.2");
 		MainController.updateHealthBar(health);
 		MainController.updateHungerBar(hunger);
 		MainController.updateHappyBar(happy);
@@ -100,7 +150,9 @@ public class Tomo implements Initializable{
 		MainController.updateImg(surprise);	
 		}//if 
 		else {
-			MainController.updateImg(angryGIF);	
+			checkNumbers();
+			checkCat();
+
 		}//else
 		
 		checkNumbers();
@@ -109,15 +161,21 @@ public class Tomo implements Initializable{
 	}
 	
 	//Executes when task is completed
-	public static void taskCompleted(String timeAdded, String timeCompleted) {//timeAdded/timeCompleted are strings of format "YYYY-MM-DD-HR:MN" describing time task was added and deleted
+	public static void taskCompleted(String timeAdded, String timeCompleted) throws SQLException {//timeAdded/timeCompleted are strings of format "YYYY-MM-DD-HR:MN" describing time task was added and deleted
 		MainController.updateImg(tastyGIF);
 
 		points +=1;
+		Database.editTamo(1, "1");
 		MainController.updatePointsCounter(points.toString());
-		health += 0.3;
+		health += 0.1;
+		Database.editTamo(2, "0.1");
+
 		hunger+=0.2;
+		Database.editTamo(5, "0.2");
+
 		happy+=0.4;
-		
+		Database.editTamo(4, "0.2");
+
 		MainController.updateHealthBar(health);
 		MainController.updateHungerBar(hunger);
 		MainController.updateHappyBar(happy);
@@ -128,7 +186,7 @@ public class Tomo implements Initializable{
 		
 		
 	}
-	public static void checkCat() {
+	public static void checkCat() throws SQLException {
 		if (health < -0.0){			
 			MainController.updateImg(deathGIF);
 			MainController.updateUpdatesList("Your virtual pet has died.");
@@ -156,14 +214,17 @@ public class Tomo implements Initializable{
 
 		}
 	}
-	public static void checkHunger() {
+	public static void checkHunger() throws SQLException {
 		if(hunger <0.3) {
 			health -=0.2;
+			Database.editTamo(2, "-0.2");
+
 		}
 	}
-	public static void checkNumbers() {
+	public static void checkNumbers() throws SQLException {
 		if (health > 1) {
 			health = 1.0;
+
 		}
 		if (hunger > 1) {
 			hunger = 1.0;
@@ -173,23 +234,35 @@ public class Tomo implements Initializable{
 		}
 		if (health < -0.2) {
 			health = -0.2;
+			Database.editTamo(2, "-0.2");
+
 		}
 		if (hunger < -0.2) {
 			hunger = -0.2;
+			Database.editTamo(5, "-0.2");
+
 		}
 		if (happy < -0.2) {
 			happy = -0.2;
+			Database.editTamo(4, "-0.2");
+
 		}
 	}
 	
-	public static void alarmAdded() {
+	public static void alarmAdded() throws SQLException {
 		MainController.updateUpdatesList("New task added.");//Execute this to update updates-list below tamagotchi
 		//Start ->
 		//Added just for reference, please add your own with different logic
 		
-		health+=0.2;
-		hunger+=0.3;
+		health+=0.1;
+		Database.editTamo(2, "0.1");
+
+		hunger+=0.2;
+		Database.editTamo(5, "0.2");
+
 		happy+=0.2;
+		Database.editTamo(4, "0.1");
+
 		MainController.updateHealthBar(health);
 		MainController.updateHungerBar(hunger);
 		MainController.updateHappyBar(happy);
@@ -198,6 +271,8 @@ public class Tomo implements Initializable{
 		
 		//energy to do tasks
 		hunger-=0.1;
+		Database.editTamo(5, "0.1");
+
 		MainController.updateHungerBar(hunger);
 		
 		checkNumbers();
@@ -205,12 +280,18 @@ public class Tomo implements Initializable{
 		//<- End
 	}
 	
-	public static void alarmDeleted() {
+	public static void alarmDeleted() throws SQLException {
 		MainController.updateUpdatesList("Task removed.");//Execute this to update updates-list below tamagotchi
 
-		health -= 0.3;
-		hunger-=0.4;
-		happy-=0.3;
+		health -= 0.1;
+		Database.editTamo(2, "-0.1");
+
+		hunger-=0.2;
+		Database.editTamo(5, "-0.2");
+
+		happy-=0.1;
+		Database.editTamo(4, "-0.1");
+
 		MainController.updateHealthBar(health);
 		MainController.updateHungerBar(hunger);
 		MainController.updateHappyBar(happy);
@@ -226,14 +307,22 @@ public class Tomo implements Initializable{
 		checkCat();
 	}
 	
-	public static void alarmChecked() {//runs when alarm goes off and is responded to
+	public static void alarmChecked() throws SQLException {//runs when alarm goes off and is responded to
 		MainController.updateImg(tastyGIF);
 
 		points +=1;
+		Database.editTamo(1, "1");
+
 		MainController.updatePointsCounter(points.toString());
-		health += 0.3;
-		hunger+=0.2;
-		happy+=0.4;
+		health += 0.1;
+		Database.editTamo(2, "0.1");
+
+		hunger+=0.3;
+		Database.editTamo(5, "0.3");
+
+		happy+=0.1;
+		Database.editTamo(2, "0.1");
+
 		
 		MainController.updateHealthBar(health);
 		MainController.updateHungerBar(hunger);
