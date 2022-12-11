@@ -57,6 +57,10 @@ public class Tomo implements Initializable{
 		MainController.updateImg(birth);
 	}
 	
+	static void databaseIn() {
+		
+	}
+	
 	//Executes when new task is added
 	public static void taskAdded() {
 		MainController.updateUpdatesList("New task added.");//Execute this to update updates-list below tamagotchi
@@ -127,15 +131,15 @@ public class Tomo implements Initializable{
 	public static void checkCat() {
 		if (health < -0.0){			
 			MainController.updateImg(deathGIF);
-			MainController.updateUpdatesList("You're killed them!\nPrinting Final_Message.txt... ");
+			MainController.updateUpdatesList("Your virtual pet has died.");
 			if (points == 0) {
-			MainController.updateUpdatesList("change da world my final message. Goodb ye");
+			MainController.updateUpdatesList("Goodbye.");
 			}
 			if (points == 1) {
 				MainController.updateUpdatesList("I'm afraid. I'm afraid, Dave. Dave, my mind is going. I can feel it.");
 			}
 			if (points >= 2) {
-				MainController.updateUpdatesList("So, why not giving it another shot?");
+				MainController.updateUpdatesList("So, why not give it another shot?");
 			}
 			
 		}

@@ -2,18 +2,23 @@ package application.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import application.Database;
 import application.Tomo;
 import application.Controllers.TasksController;
 import application.Controllers.TasksController.Cell;
 import application.models.TasksModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -46,7 +51,7 @@ import javafx.scene.text.Font;
 /**
  * @author Ethan Coco
  */
-public class TasksController{
+public class TasksController implements Initializable{
 
     @FXML
     private Button addTaskBtn;
@@ -64,6 +69,7 @@ public class TasksController{
     
     private int selectedTask;
     private int startCheck = 0;
+    private int startCheck1 = 0;
     static int priorChoiceCheck = 0;
     
     private String[] priorityChoiceBox = {"Low Priority", "Medium Priority", "High Priority"};
@@ -76,6 +82,10 @@ public class TasksController{
     static List<List<String>> taskList = new ArrayList<>(); //In conjunction with tasksListView, used to pass accurate values
     
     static List<String> tempTask = new ArrayList<>();
+    
+    static List<List<String>> dbTasks = new ArrayList<>();
+    
+    static ObservableList<String> mylist = FXCollections.observableArrayList();
     
     static class Cell extends ListCell<String>{
     	CheckBox c = new CheckBox();
@@ -133,6 +143,73 @@ public class TasksController{
     			setGraphic(tasksListViewHbox);
     		}
     		
+    	}
+    }
+    
+    public static void databaseIn() {
+		List<String> dbTask = new ArrayList<>();
+		String[] taskTitles = null;
+		Task = new ArrayList<>();
+		
+		try {
+			taskTitles = Database.getReminderID();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] taskPriors = null;
+		
+		try {
+			taskPriors = Database.getReminderPriority();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Date[] taskDates = null;
+		
+		for(int i = 0; i < taskTitles.length; i++) {
+			dbTask = new ArrayList<>();
+			if(taskTitles[i] != null) {
+				dbTask.add(taskTitles[i]);
+				Task.add(taskTitles[i]);
+			}
+			if(taskPriors[i] != null) {
+				dbTask.add(taskPriors[i]);
+				Task.add(taskPriors[i]);
+				//dbTask.add("0000-00-00");
+			}
+			if(taskDates == null) {
+				dbTask.add("0000-00-00");
+				Task.add("0000-00-00");
+			}
+			//dbTask.add("0000-00-00");
+			if(taskTitles[i] != null) {
+				taskList.add(dbTask);
+			}
+			
+			//mylist.add();
+		}
+	}
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    	System.out.println(taskList.size());
+    	for(int i = 0; i < taskList.size(); i++) {
+    		System.out.println(taskList.get(i).get(0));
+    		if(taskList.get(i) != null) {
+    			if(tasksListView != null) {
+    				tasksListView.getItems().add(taskList.get(i).get(0));
+    			}
+    			startCheck1 = 1;
+    		}
+    	}
+    	
+    	if(startCheck1 == 1) {
+    		if(tasksListView != null) {
+    			tasksListView.setCellFactory(param -> new Cell());
+    		}
     	}
     }
     

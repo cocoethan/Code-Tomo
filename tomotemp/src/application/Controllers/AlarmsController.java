@@ -2,6 +2,8 @@ package application.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import application.Database;
 import application.Tomo;
 import application.Controllers.AlarmsController;
 import application.Controllers.AlarmsController.Cell;
@@ -104,6 +107,7 @@ public class AlarmsController implements Initializable{
     
     private int startCheck = 0;
     
+    private int startCheck1 = 0;
     //int threadcount = 0;
     
     @Override
@@ -124,9 +128,87 @@ public class AlarmsController implements Initializable{
     	currMn = mns.getValue();
     	currAmPm = aps.getValue();
     	
+    	System.out.println(alarmList.size());
+    	for(int i = 0; i < alarmList.size(); i++) {
+    		System.out.println(alarmList.get(i).get(0));
+    		if(alarmList.get(i) != null) {
+    			if(alarmsListView != null) {
+    				alarmsListView.getItems().add(alarmList.get(i).get(1));
+    			}
+    			startCheck1 = 1;
+    		}
+    	}
     	
+    	if(startCheck1 == 1) {
+    		if(alarmsListView != null) {
+    			alarmsListView.setCellFactory(param -> new Cell());
+    		}
+    	}
     	
     }
+    
+    public static void databaseIn() {
+    		List<String> dbAlarm = new ArrayList<>();
+    		Time[] alarmTimes = null;
+    		String[] alarmTitles = null;
+    		String[] alarmCompTime = null;
+    		
+    		Alarm = new ArrayList<>();
+    		
+    		try {
+    			alarmTimes = Database.getAlarmTime();
+    			for(int i = 0; i < alarmTimes.length; i++) {
+    				if(alarmTimes[i] != null) {
+    					System.out.println(alarmTimes[i].toString());
+    				}
+    			}
+    			//System.out.println(alarmTimes.toString());
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    		
+    		try {
+    			alarmTitles = Database.getAlarmID();
+    			
+    			for(int i = 0; i < alarmTitles.length; i++) {
+    				if(alarmTitles[i] != null) {
+    					System.out.println(alarmTitles[i].toString());
+    				}
+    			}
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+    		for(int i = 0; i < alarmTitles.length; i++) {
+    			dbAlarm = new ArrayList<>();
+    			if(alarmTimes[i] != null) {
+    				dbAlarm.add("" + alarmTimes[i]);
+    				Alarm.add("" + alarmTimes[i]);
+    			}
+    			if(alarmTitles[i] != null) {
+    				dbAlarm.add(alarmTitles[i]);
+    				Alarm.add(alarmTitles[i]);
+    				//dbTask.add("0000-00-00");
+    			}
+    			
+    			if(alarmTimes[i] != null) {
+    				String or = "" + alarmTimes[i];
+    				String nw = or.replace(":", "");
+    				String nw1 = nw.substring(0, nw.length() - 2);
+    				
+    				dbAlarm.add(nw1);
+    				Alarm.add(nw1);
+    			}
+    			
+    			//dbTask.add("0000-00-00");
+    			if(alarmTitles[i] != null) {
+    				alarmList.add(dbAlarm);
+    			}
+    		}
+
+	}
     
     static class Cell extends ListCell<String>{
     
