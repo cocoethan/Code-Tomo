@@ -13,50 +13,31 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+//Main method
+//Sets MVC stage and starts program
+
 public class Main extends Application{
 	
 	static String currTime;
 	
-	/**
-	 * Loads, creates, and sets UI view
-	 *@author Ethan Coco
-	 *@param primaryStage
-	 */
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) {//Sets MVC Stage
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/mainFrame.fxml"));
 			Scene scene = new Scene(root, 1280, 720);
-			primaryStage.setTitle("Test");
-			//scene.getStylesheets().add("/resources/css/list-view-cell-gap.css");
-			primaryStage.setScene(scene);//Setting View (MVC Model)
+			primaryStage.setTitle("tomo");
+			primaryStage.setScene(scene);
 			primaryStage.show();
 			
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 			LocalDateTime now = LocalDateTime.now();
-			//System.out.println(dtf.format(now));
 			
-			
-			//Thread clock = new Thread(){
-			    //public void run(){
-			      //System.out.println("Thread Running");
-			      //currTime = dtf.format(now);
-			    //}
-			//};
-			//clock.start();
-			
-			//Controller.tasksListView.setCellFactory(param -> new Controller.Cell());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/**
-	 * Launches application
-	 * @author Ethan Coco
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) {//Starts program / Starts database
 		Database db = new Database();
 		ResultSet rs;
 		try {
@@ -65,10 +46,8 @@ public class Main extends Application{
 				System.out.println(rs.getString("userName") + " ");
 			}
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -79,4 +58,3 @@ public class Main extends Application{
 		
 	}
 }
-//test
