@@ -5,6 +5,6 @@ module tomotemp {
 	requires javafx.base;
 	requires java.sql;
 	
-	opens application;
 	opens application.Controllers to javafx.controls, javafx.graphics, javafx.fxml;
+	opens application;
 }
