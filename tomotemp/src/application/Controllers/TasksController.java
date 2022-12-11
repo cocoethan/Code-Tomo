@@ -48,9 +48,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-/**
- * @author Ethan Coco
- */
 public class TasksController implements Initializable{
 
     @FXML
@@ -78,8 +75,8 @@ public class TasksController implements Initializable{
     static String tPriorChoiceBoxToString;
     private int priorChoiceBoxToInt = 0;
     
-    static List<String> Task = new ArrayList<>(); //
-    static List<List<String>> taskList = new ArrayList<>(); //In conjunction with tasksListView, used to pass accurate values
+    static List<String> Task = new ArrayList<>();
+    static List<List<String>> taskList = new ArrayList<>();
     
     static List<String> tempTask = new ArrayList<>();
     
@@ -97,10 +94,7 @@ public class TasksController implements Initializable{
     	HBox tasksListViewHbox = new HBox();
     	Pane tasksListViewPane = new Pane();
     	Label tasksListViewTitleLabel = new Label("");
-    	//Button tasksListViewEditBtn = new Button("Edit");
     	Button tasksListViewDeleteBtn = new Button("Delete");
-    	
-    	//int currIndex = getListView().getSelectionModel().getSelectedIndex();
     	
     	public Cell() {
     		super();
@@ -111,7 +105,6 @@ public class TasksController implements Initializable{
     		tasksListViewHbox.setAlignment(Pos.CENTER_LEFT);
     		tasksListViewDeleteBtn.setOnAction(e -> {
     			getListView().getSelectionModel().select(getItem());
-    			//System.out.println(getListView().getSelectionModel().getSelectedIndex() + "");
     			deleteTask(getListView().getSelectionModel().getSelectedIndex());
     			getListView().getItems().remove(getItem());
     		});
@@ -154,7 +147,6 @@ public class TasksController implements Initializable{
 		try {
 			taskTitles = Database.getReminderID();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -163,7 +155,6 @@ public class TasksController implements Initializable{
 		try {
 			taskPriors = Database.getReminderPriority();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -178,18 +169,14 @@ public class TasksController implements Initializable{
 			if(taskPriors[i] != null) {
 				dbTask.add(taskPriors[i]);
 				Task.add(taskPriors[i]);
-				//dbTask.add("0000-00-00");
 			}
 			if(taskDates == null) {
 				dbTask.add("0000-00-00");
 				Task.add("0000-00-00");
 			}
-			//dbTask.add("0000-00-00");
 			if(taskTitles[i] != null) {
 				taskList.add(dbTask);
 			}
-			
-			//mylist.add();
 		}
 	}
     
@@ -243,11 +230,8 @@ public class TasksController implements Initializable{
 				
 				
 				tTitleTextFieldToString = tController.tTitleTextField.getText();
-				//Add name to Task array
 				
-				Task.add(tController.tTitleTextField.getText());//Add name to task array
-				
-				//Add priority to Task array
+				Task.add(tController.tTitleTextField.getText());
 				
 				if(tController.tPriorChoiceBox.getValue() == "Low Priority") {
 					priorChoiceCheck = 1;
@@ -269,7 +253,6 @@ public class TasksController implements Initializable{
 					Task.add(0 + "");
 				}
 				
-				//Add date to Task array
 				if(tController.tDateDatePicker.getValue() != null) {
 					Task.add(tController.tDateDatePicker.getValue().toString());
 				}else {
@@ -283,8 +266,6 @@ public class TasksController implements Initializable{
 				Task.add(timeadded);
 				Task.add("0000-00-00-00:00");
 				
-				//System.out.println("HERE: " + tTitleTextFieldToString);
-				
 				for(int i = 0; i < taskList.size(); i++) {
 					if(Task.get(0).equals(taskList.get(i).get(0))) {
 						flag = 1;
@@ -297,25 +278,22 @@ public class TasksController implements Initializable{
 					}else {
 						MainController.updateUpdatesList("Error adding task: task must have a title.");
 					}
-					//System.out.println("Error");
-					//MainController.updateUpdatesList("Error adding task: task must have a title.");
 				}else {
 					taskList.add(Task);
 					tasksListView.getItems().add(tController.tTitleTextField.getText());
 					TasksModel.addNewTaskToDB(Task);
-					Tomo.taskAdded();
+					try {
+						Tomo.taskAdded();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				
-				//!!! FOR LANE DEESE
-				//Start Add Task to Database from controller
-				//End AddTask to Database from controller
 			}
 			if(flag == 0) {
-				//Tomo.taskAdded();
 			}
 			
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
     }
@@ -325,7 +303,12 @@ public class TasksController implements Initializable{
     	TasksModel.deleteTaskToDB(taskList.get(position));
     	taskList.remove(position);
     	
-    	Tomo.taskDeleted();
+    	try {
+			Tomo.taskDeleted();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     static void completeTask(int position) {
@@ -346,7 +329,12 @@ public class TasksController implements Initializable{
     	
     	
     	//taskList.set(position, Task);
-    	Tomo.taskCompleted(taskList.get(position).get(3).toString(),taskList.get(position).get(4).toString());
+    	try {
+			Tomo.taskCompleted(taskList.get(position).get(3).toString(),taskList.get(position).get(4).toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
 }
