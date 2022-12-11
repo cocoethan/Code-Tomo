@@ -22,21 +22,16 @@ public class TasksModel{
 		try {
 			date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		java.sql.Date date2 = new java.sql.Date(date1.getTime());
 		
-		//System.out.println(date2.toString());
-		
-		//MainController.updateUpdatesList("New task added.");
 		System.out.println("Task Added: " + currTask);
 		
 		try {
 			Database.placeReminder(name, null, null, date2, priority);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -44,15 +39,12 @@ public class TasksModel{
 	
 	public static void deleteTaskToDB(List<String> currTask) {
 		String name = currTask.get(0);
-		//String priority = currTask.get(1);
-		//String date = currTask.get(2);
 		
 		System.out.println("Task Deleted: " + currTask);
 		
 		try {
 			Database.removeReminder(name);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
