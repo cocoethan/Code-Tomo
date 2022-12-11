@@ -23,9 +23,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-/**
- * @author Ethan Coco
- */
 public class MainController implements Initializable{
 
 	@FXML
@@ -129,11 +126,8 @@ public class MainController implements Initializable{
     public void start() {
     }
     
-    //Used to update list when outside function happens, for example: task added, task removed
     public static void updateUpdatesList(String message) {
     	updateItems.add(message);
-    	
-    	//updatesList.setItems(sortedList);
     }
     
     public static void updatePointsCounter(String points) {
@@ -155,12 +149,10 @@ public class MainController implements Initializable{
     }
     
     public static void updateImg(String img) {
-    	//imgCat = "";
     	imgCat = "/resources/images/" + img;
     	System.out.println(imgCat);
     	imageS = new Image(MainController.class.getResourceAsStream(imgCat));
     	imageViewS.setImage(imageS);
-    	//imgCat = "";
     }
     
 }
