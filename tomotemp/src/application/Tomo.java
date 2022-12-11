@@ -56,9 +56,46 @@ public class Tomo implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		MainController.updateImg(birth);
-		
-
-		
+		try {
+			points = Integer.valueOf(Database.retrieveTamoValues(3));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			health = Double.valueOf(Database.retrieveTamoValues(2));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			hunger = Double.valueOf(Database.retrieveTamoValues(5));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			happy = Double.valueOf(Database.retrieveTamoValues(6));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MainController.updatePointsCounter(points.toString());
+		MainController.updateHealthBar(health);
+		MainController.updateHungerBar(hunger);
+		MainController.updateHappyBar(happy);
 	}
 	
 	static void databaseIn() {
