@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 
+
 public class Database {
 	private static Connection conn;
 	private static boolean hasData = false;
@@ -49,10 +50,13 @@ public class Database {
 						+ "reminderTime time(7)," + "reminderDate varchar(10)," + "userID integer," + "priority varchar(10),"+ "PRIMARY KEY(reminderID)," 
 						+ "FOREIGN KEY (userID) REFERENCES user(userID));");
 				state2.executeUpdate("CREATE TABLE tamo(tamoID varchar(30)," + "userID integer," + "tamoType varchar(60)," +
-					"tamoMood varchar(60)," + "tamoHealth integer," +"tamoHunger integer," +"tamoOvrPts integer," +"tamoPts integer,"
+					"tamoMood varchar(60)," + "tamoHealth double(3,1)," +"tamoHunger double(3,1)," +"tamoOvrPts double(3,1)," +"tamoPts integer,"
 						+"PRIMARY KEY(userID)," + "FOREIGN KEY (userID) REFERENCES user(userID));");
 				Database.generateTamo("georgie", "cat", "neutral");
+				state2.execute("PRAGMA journal_mode=WAL;");
+				state2.close();
 			}
+			state.close();
 		
 		
 		}
@@ -67,7 +71,8 @@ public class Database {
 		baseId.setTime(3, time);
 		baseId.setDate(4, date);
 		baseId.setInt(5, 1);
-		baseId.execute();
+		baseId.executeLargeUpdate();
+		baseId.close();
 	}
 	
     public static void placeReminder(String rID, String days, Time time, java.sql.Date date, String priority) throws SQLException {
@@ -78,18 +83,19 @@ public class Database {
 		baseId.setDate(4, date);
 		baseId.setInt(5, 1);
 		baseId.setString(6, priority);
-		baseId.execute();
+		baseId.executeLargeUpdate();
+		baseId.close();
 	}
 	public static void removeReminder(String rID) throws SQLException {
 		Statement state = conn.createStatement();
 		state.execute("DELETE FROM reminder WHERE reminderID='" + rID + "';");
-		
+		state.close();
 	}
 	
 	public static void removeAlarm(String rID) throws SQLException {
         Statement state = conn.createStatement();
-        state.execute("DELETE FROM alarm WHERE alarmID='" + rID + "';");
-
+        state.executeUpdate("DELETE FROM alarm WHERE alarmID='" + rID + "';");
+        state.close();
     }
 	
 	public static void generateTamo(String tID, String type, String mood) throws SQLException {
@@ -98,66 +104,87 @@ public class Database {
 		baseId.setInt(2, 1);
 		baseId.setString(3, type);
 		baseId.setString(4, "happy");
-		baseId.setInt(5, 100);
-		baseId.setInt(6, 1);
-		baseId.setInt(7, 0);
+		baseId.setDouble(5, 1.0);
+		baseId.setDouble(6, 1.0);
+		baseId.setDouble(7, 0.0);
 		baseId.setInt(8, 0);
 		baseId.execute();
+		baseId.close();
 	}
 	public static void editTamo(int i, String input) throws SQLException {
 		PreparedStatement p = null;
 		ResultSet rs = null;
-		int currVal;
+		Double currVal;
 		String sql;
 		switch (i) {
 		case 1:
 			sql = "select tamoPts from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
 			rs = p.executeQuery();
-			currVal = rs.getInt("tamoPts");
+			int locPts;
+			locPts = rs.getInt("tamoPts");
 			
-			currVal = currVal + Integer.parseInt(input);
-			sql = "update tamo SET tamoPts = "+ currVal +" where userID = 1;";
+			locPts = locPts + Integer.parseInt(input);
+			sql = "update tamo SET tamoPts = "+ locPts +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
+			p.close();
 		case 2:
 			sql = "select tamoHealth from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
 			rs = p.executeQuery();
-			currVal = rs.getInt("tamoHealth");
-			currVal = currVal + Integer.parseInt(input);
-			if(currVal > 100) {
-				currVal = 100;
+			currVal = rs.getDouble("tamoHealth");
+			currVal = currVal + Double.parseDouble(input);
+			if(currVal > 1.0) {
+				currVal = 1.0;
 			}
-			if(currVal < 100) {
-				currVal = 0;
+			if(currVal < 1.0) {
+				currVal = 0.0;
 			}
 			sql = "update tamo SET tamoHealth = "+ currVal +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
+			p.close();
 		case 3:
 			sql = "select tamoMood from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
 			rs = p.executeQuery();
 			sql = "update tamo SET tamoMood = "+ input +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
+			p.close();
 		case 4:
 			sql = "select tamoOvrPts from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
 			rs = p.executeQuery();
+			currVal = rs.getDouble("tamoOvrPts");
+			currVal = currVal + Double.parseDouble(input);
+			if(currVal > 1.0) {
+				currVal = 1.0;
+			}
+			if(currVal < 1.0) {
+				currVal = 0.0;
+			}
 			sql = "update tamo SET tamoOvrPts = "+ input +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
+			p.close();
 		case 5:
 			sql = "select tamoHunger from tamo where userID = 1;";
 			p = conn.prepareStatement(sql);
 			rs = p.executeQuery();
-			currVal = rs.getInt("tamoHunger");
-			currVal = currVal + Integer.parseInt(input);
+			currVal = rs.getDouble("tamoHunger");
+			currVal = currVal + Double.parseDouble(input);
+			if(currVal > 1.0) {
+				currVal = 1.0;
+			}
+			if(currVal < 1.0) {
+				currVal = 0.0;
+			}
 			sql = "update tamo SET tamoHunger = "+ currVal +" where userID = 1;";
 			p = conn.prepareStatement(sql);
-			p.execute();
+			p.executeUpdate();
+			p.close();
 		}
 		
 	}
@@ -178,6 +205,8 @@ public class Database {
 			 Time time = rs.getTime("alarmTime");
 			 Date date = rs.getDate("alarmDate");
 		 }
+		 rs.close();
+		 p.close();
 		return id;
 		}
 	public static Time[] getAlarmTime() throws SQLException {
@@ -194,6 +223,8 @@ public class Database {
 			 i++;
 
 		 }
+		 p.close();
+		 rs.close();
 		 return t;
 	}
 	public static String retrieveTamoValues(int i) throws SQLException {
@@ -204,30 +235,36 @@ public class Database {
 		p = conn.prepareStatement(sql);
 		rs = p.executeQuery();
 		String tID;
-		int health;
+		Double health;
 		int pts;
-		int hunger;
+		Double hunger;
 		String mood;
-		String affection;
+		Double affection;
 		 while (rs.next()) {
 			 tID = rs.getString("tamoID");
-			 health= rs.getInt("tamoHealth"); 
+			 health= rs.getDouble("tamoHealth"); 
 			 pts = rs.getInt("tamoPts");
 			 mood = rs.getString("tamoMood");
-			 affection = rs.getString("tamoOvrPts");
-			 hunger = rs.getInt("tamoHunger");
+			 affection = rs.getDouble("tamoOvrPts");
+			 hunger = rs.getDouble("tamoHunger");
 			 switch (i){
 			 case 1:
+				 p.close();
 				 return tID;
 			 case 2:
+				 p.close();
 				 return String.valueOf(health);
 			 case 3:
+				 p.close();
 				 return String.valueOf(pts);
 			 case 4:
+				 p.close();
 				 return mood;
 			 case 5:
-				 return affection;
+				 p.close();
+				 return String.valueOf(affection);
 			 case 6:
+				 p.close();
 				 return String.valueOf(hunger);
 			 }
 			}
@@ -245,6 +282,7 @@ public class Database {
 			 Date date= rs.getDate("reminderDate"); 
 			 String priority = rs.getString("priority");
 			// System.out.println("rID:" + rID + " date: " + " priority: " + priority);
+			 p.close();
 		 }
 		}
 	public static String[] getReminderID() throws SQLException {
@@ -260,6 +298,7 @@ public class Database {
 			 rIDArr[i] = rID;
 			 i++;
 		 }
+		 p.close();
 		 return rIDArr;
 	}
 	
@@ -276,6 +315,7 @@ public class Database {
 			 rDate[i] = date;
 			 i++;
 		 }
+		 p.close();
 		 return rDate;
 	}
 
@@ -292,6 +332,7 @@ public class Database {
 			 rPrio[i] = priority;
 			 i++;
 		 }
+		 p.close();
 		 return rPrio;
 	}
 }
