@@ -14,9 +14,10 @@ Instructions to execute jar file -
 Note: Source code can be ran on Java 12 and above through a supported IDE
 Instructions to run source code in IDE -
 1. Download JavaFX on your system
-2. Include JavaFX SDK Library, JRE System Library (above Java-SE 12), and JavaFX lib folder jars in project's MODULEPATH
-Issues and Resolutions for jar file execution -
+2. Place tomotemp folder into IDE as project
+3. Include JavaFX SDK Library, JRE System Library (above Java-SE 12), and JavaFX lib folder jars in project's MODULEPATH
 
+Issues and Resolutions for jar file execution -
 Note: When running in a supported IDE, older Java versions are supported.
 Note: Current jar file was compiled with JDK19 and will need JDK19 to run.
 Error: java.lang.UnsupportedClassVersionError
