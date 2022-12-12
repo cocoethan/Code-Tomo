@@ -39,7 +39,7 @@
                   <Spinner fx:id="aps" prefHeight="25.0" prefWidth="149.0" GridPane.columnIndex="2" />
                </children>
             </GridPane>
-            <Label text="Title (Optional)" GridPane.rowIndex="1" />
+            <Label text="Title" GridPane.rowIndex="1" />
             <TextField fx:id="textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
