@@ -13,9 +13,10 @@ Instructions to execute jar file -
 
 Note: Source code can be ran on Java 12 and above through a supported IDE
 Instructions to run source code in IDE -
-1. Download JavaFX on your system
-2. Place tomotemp folder into IDE as project
-3. Include JavaFX SDK Library, JRE System Library (above Java-SE 12), and JavaFX lib folder jars in project's MODULEPATH
+1. Download JavaFX on your system / Add JavaFX plugin to Eclipse or other IDE, link: https://openjfx.io/
+2. Download SQLite jar, link: https://github.com/xerial/sqlite-jdbc#download
+3. Place tomotemp folder into IDE as project
+4. Include JavaFX SDK Library, JRE System Library (above Java-SE 12), JavaFX lib folder jars, and SQLite jar in project's MODULEPATH
 
 Issues and Resolutions for jar file execution -
 Note: When running in a supported IDE, older Java versions are supported.
